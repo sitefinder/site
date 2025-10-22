@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPIDATA - Login & Dashboard</title>
+    <title>GPIDATA - Dashboard</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Configure Tailwind to use Inter font -->
@@ -37,7 +37,7 @@
         /* Style for the simulated progress bar spinner */
         .loader {
             border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid var(--btn-bg-color, #4CAF50); /* Themed color */
+            border-top: 4px solid var(--btn-bg-color, #FF6600); /* Themed color */
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -78,93 +78,51 @@
     <div id="mainLayout" class="min-h-screen flex flex-col transition-colors duration-500">
 
         <!-- ============================================== -->
-        <!-- 0. LOGIN VIEW (Initial View) -->
+        <!-- 0. LOGIN VIEW (PERMANENTLY HIDDEN) -->
+        <!-- This section is kept hidden for structural integrity, 
+             but all related JS logic is removed. -->
         <!-- ============================================== -->
-        <section id="loginView" class="min-h-screen flex items-center justify-center p-6 bg-white transition-opacity duration-500">
+        <section id="loginView" class="min-h-screen flex items-center justify-center p-6 bg-white hidden">
             <div class="w-full max-w-sm">
-
                 <!-- Logo (Simulated) -->
                 <div class="flex flex-col items-center mb-10">
                     <img id="logoImage" class="w-40 h-auto" src="https://placehold.co/173x90/FF6600/FFFFFF?text=Banglalink" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/173x90/FF6600/FFFFFF?text=Logo';" />
                     <h2 class="text-2xl font-bold mt-4 text-gray-700">GPIDATA Login</h2>
                 </div>
-
-                <!-- Username Input -->
+                <!-- Username Input (Kept for ID consistency) -->
                 <div class="relative mb-4">
-                    <input
-                        type="text"
-                        id="usernameInput"
-                        placeholder="Username / ID"
-                        class="app-input w-full h-12 pr-12 text-base"
-                    />
-                    <!-- Simulating Android drawableEnd: ic_email (using lucide icon equivalent) -->
-                    <span class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    </span>
+                    <input type="text" id="usernameInput" placeholder="Username / ID" class="app-input w-full h-12 pr-12 text-base" />
                 </div>
-
-                <!-- Password Input with Show/Hide Button -->
+                <!-- Password Input (Kept for ID consistency) -->
                 <div class="relative mb-4">
-                    <input
-                        type="password"
-                        id="passwordInput"
-                        placeholder="Password"
-                        class="app-input w-full h-12 pr-12 text-base"
-                    />
-                    <!-- Simulating Android drawableEnd: ic_lock -->
-                    <span class="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    </span>
-                    <!-- Show/Hide Password Button (ic_visibility_off/ic_visibility) -->
+                    <input type="password" id="passwordInput" placeholder="Password" class="app-input w-full h-12 pr-12 text-base" />
                     <button id="showHideBtn" class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 text-gray-500 hover:text-gray-700 focus:outline-none">
                         <svg id="visibilityIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
                     </button>
                 </div>
 
-                <!-- Remember Me Checkbox & Forgot Password Link -->
-                <div class="flex justify-between items-center mb-6">
-                    <label class="flex items-center text-sm text-gray-600">
-                        <input type="checkbox" id="rememberMe" class="form-checkbox h-4 w-4 text-banglalink-orange rounded" checked>
-                        <span class="ml-2">Remember Me</span>
-                    </label>
-                    <button id="forgotPassword" class="text-sm font-medium text-banglalink-orange hover:text-red-700">
-                        Forgot Password?
-                    </button>
-                </div>
-
-                <!-- Sign In Button (Manual Login) -->
+                <!-- Sign In Button (Kept for ID consistency) -->
                 <button
                     id="loginBtn"
-                    class="w-full h-12 mb-4 text-white bg-banglalink-orange hover:bg-orange-700 transition-colors font-bold text-lg rounded-lg shadow-lg"
+                    class="w-full h-12 mb-4 text-white bg-banglalink-orange transition-colors font-bold text-lg rounded-lg shadow-lg"
                 >
                     <span id="loginBtnText">Sign In</span>
                     <div id="loginSpinner" class="loader mx-auto hidden" style="--btn-bg-color: #FF6600;"></div>
                 </button>
-
-                <!-- Google Sign-In Button (Simulated) -->
-                <button
-                    id="btnGoogleSignIn"
-                    class="w-full h-12 flex items-center justify-center space-x-2 border border-gray-300 rounded-lg shadow-md bg-white text-gray-700 hover:bg-gray-50 transition-colors font-medium mb-4"
-                >
-                    <img class="w-6 h-6" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google G Logo"/>
-                    <span>Sign In with Google</span>
-                </button>
-
-                <!-- NEW: Debug Button -->
-                <button
-                    id="checkJsonBtn"
-                    class="w-full h-12 flex items-center justify-center space-x-2 border border-gray-300 rounded-lg shadow-md bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors font-medium text-sm"
-                >
-                    <span>JSON ডেটা চেক করুন (Debug)</span>
-                </button>
+                
+                <!-- Debug Button (Kept for ID consistency) -->
+                <button id="checkJsonBtn" class="w-full h-12 hidden"><span>JSON ডেটা চেক করুন (Debug)</span></button>
+                <div id="forgotPassword" class="hidden"></div>
+                <div id="rememberMe" class="hidden"></div>
+                <div id="btnGoogleSignIn" class="hidden"></div>
             </div>
         </section>
 
 
         <!-- ============================================== -->
-        <!-- 1. DASHBOARD VIEW (Default View - Hidden Initially) -->
+        <!-- 1. DASHBOARD VIEW (NOW THE DEFAULT/STARTING VIEW) -->
         <!-- ============================================== -->
-        <section id="dashboardView" class="min-h-screen flex-col hidden">
+        <section id="dashboardView" class="min-h-screen flex-col flex">
             <!-- Scrollable Content -->
             <main id="scrollContent" class="flex-grow overflow-y-auto p-4 md:p-6">
                 <div class="max-w-4xl mx-auto">
@@ -324,7 +282,7 @@
         <!-- Content will be injected by showMessage() -->
     </div>
 
-    <!-- JSON Data Modal (For Debugging) -->
+    <!-- JSON Data Modal (Not used, but kept for ID consistency) -->
     <div id="jsonModal" class="fixed inset-0 bg-black bg-opacity-70 hidden items-center justify-center z-[1001] p-4">
         <div class="bg-white p-6 rounded-lg shadow-2xl w-full max-w-lg h-3/4 flex flex-col">
             <h2 class="text-xl font-bold mb-4 text-gray-800">রিমোট JSON ডেটা (Debugging)</h2>
@@ -340,12 +298,9 @@
     <script>
         // Constants
         const THEME_STORAGE_KEY = "SelectedTheme";
-        const AUTH_STORAGE_KEY = "isLoggedIn";
         const THEME_DEFAULT = "Default";
         // URL for Site Data Fetch (used in searchView)
-        const JSON_URL = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec";
-        // URL for Login Verification (mirroring LoginActivity.java)
-        const LOGIN_JSON_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/login.json"; 
+        const JSON_URL = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec"; 
         const KEY_LAST_SEARCH = "last_search";
         const KEY_SEARCH_HISTORY = "search_history";
 
@@ -354,7 +309,6 @@
         let currentLong = 0.0;
         let finalResult = "";
         let searchHistory = [];
-        let isPasswordVisible = false;
 
         // Theme Definitions (matching Java's THEME_COLORS)
         const THEME_COLORS = {
@@ -375,26 +329,17 @@
         // All necessary elements for all views
         const elements = {
             mainLayout: document.getElementById('mainLayout'),
-            // Login Elements
+            // Login Elements (Kept for ID consistency but functionally ignored)
             loginView: document.getElementById('loginView'),
             usernameInput: document.getElementById('usernameInput'),
             passwordInput: document.getElementById('passwordInput'),
-            loginBtn: document.getElementById('loginBtn'),
-            loginBtnText: document.getElementById('loginBtnText'),
-            loginSpinner: document.getElementById('loginSpinner'),
-            forgotPassword: document.getElementById('forgotPassword'),
-            showHideBtn: document.getElementById('showHideBtn'),
-            rememberMe: document.getElementById('rememberMe'),
-            visibilityIcon: document.getElementById('visibilityIcon'),
-            btnGoogleSignIn: document.getElementById('btnGoogleSignIn'),
-            checkJsonBtn: document.getElementById('checkJsonBtn'), // NEW ELEMENT
             // Dashboard Elements
             dashboardView: document.getElementById('dashboardView'),
             greetingText: document.getElementById('greetingText'),
             userNameText: document.getElementById('userNameText'),
             logoutButton: document.getElementById('logoutButton'),
             cardTheme: document.getElementById('cardTheme'),
-            // Search View Elements (Existing elements)
+            // Search View Elements
             searchView: document.getElementById('searchView'),
             searchToolbar: document.getElementById('searchToolbar'),
             toolbarTitle: document.getElementById('toolbarTitle'),
@@ -414,11 +359,8 @@
             themeOptions: document.getElementById('themeOptions'),
             closeModalButton: document.getElementById('closeModalButton'),
             messageModal: document.getElementById('messageModal'),
-            // JSON Debug Modal Elements
-            jsonModal: document.getElementById('jsonModal'), // NEW ELEMENT
-            jsonContent: document.getElementById('jsonContent'), // NEW ELEMENT
-            jsonLoadingSpinner: document.getElementById('jsonLoadingSpinner'), // NEW ELEMENT
-            closeJsonModalButton: document.getElementById('closeJsonModalButton'), // NEW ELEMENT
+            // JSON Debug Modal Elements (Kept for ID consistency)
+            jsonModal: document.getElementById('jsonModal'), 
         };
 
         const dashboardCards = [
@@ -442,11 +384,9 @@
             document.documentElement.style.setProperty('--btn-bg-color', colors.btnBg);
             document.documentElement.style.setProperty('--theme-accent', colors.accentColor);
 
-            // 1. Login Elements
+            // 1. Login Elements (Not visible, but applying theme to ensure no JS errors)
             if (elements.loginView) {
                 elements.loginView.style.backgroundColor = colors.mainBg;
-                elements.loginBtn.style.backgroundColor = colors.btnBg;
-                elements.loginSpinner.style.setProperty('--btn-bg-color', colors.btnBg);
             }
 
             // 2. Dashboard Elements
@@ -508,27 +448,24 @@
 
         const showView = (viewId) => {
             elements.loginView.classList.add('hidden');
-            elements.dashboardView.classList.add('hidden');
+            elements.dashboardView.classList.add('hidden', 'flex'); // Reset classes
             elements.searchView.classList.add('hidden');
 
             if (viewId === 'loginView') {
                 elements.loginView.classList.remove('hidden');
             } else if (viewId === 'dashboardView') {
-                elements.dashboardView.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+                elements.dashboardView.classList.remove('hidden');
                 elements.dashboardView.classList.add('flex');
             } else if (viewId === 'searchView') {
                 elements.searchView.classList.remove('hidden');
             }
         };
 
+        // *** CORE CHANGE: Always show the dashboard ***
         const checkAuthStatus = () => {
-            const isLoggedIn = localStorage.getItem(AUTH_STORAGE_KEY) === 'true';
-            if (isLoggedIn) {
-                showView('dashboardView');
-                applyTheme(getSavedTheme());
-            } else {
-                showView('loginView');
-            }
+            // Login is deleted, so always start on the dashboard.
+            showView('dashboardView');
+            applyTheme(getSavedTheme());
         };
         
         // --- History & Autocomplete Functions (Mirroring SharedPreferences) ---
@@ -574,135 +511,6 @@
             
             localStorage.setItem(KEY_SEARCH_HISTORY, searchHistory.join(','));
             updateDatalist();
-        };
-
-
-        // --- Authentication Logic (Mirroring LoginActivity.java) ---
-
-        const setLoadingState = (isLoading) => {
-            if (isLoading) {
-                elements.loginBtn.disabled = true;
-                elements.loginBtnText.classList.add('hidden');
-                elements.loginSpinner.classList.remove('hidden');
-                elements.usernameInput.disabled = true;
-                elements.passwordInput.disabled = true;
-                elements.btnGoogleSignIn.disabled = true;
-                elements.checkJsonBtn.disabled = true;
-            } else {
-                elements.loginBtn.disabled = false;
-                elements.loginBtnText.classList.remove('hidden');
-                elements.loginSpinner.classList.add('hidden');
-                elements.usernameInput.disabled = false;
-                elements.passwordInput.disabled = false;
-                elements.btnGoogleSignIn.disabled = false;
-                elements.checkJsonBtn.disabled = false;
-            }
-        };
-
-        const verifyLogin = async (user, pass) => {
-            setLoadingState(true);
-            let success = false;
-            let errorMsg = "";
-
-            try {
-                // Set a timeout for the fetch request
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
-                
-                const response = await fetch(LOGIN_JSON_URL, { signal: controller.signal });
-                clearTimeout(timeoutId); // Clear timeout if fetch succeeds/fails before timeout
-
-                if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status} (${response.statusText}).`);
-                }
-                
-                const usersArray = await response.json();
-                
-                // IMPORTANT: Ensure the fetched data is an array
-                if (Array.isArray(usersArray)) {
-                    // Iterate through the array to find a match
-                    for (const userObj of usersArray) {
-                        // Strict check: both username and password must match exactly.
-                        if (userObj.username === user && userObj.password === pass) {
-                            success = true;
-                            break;
-                        }
-                    }
-                } else {
-                    errorMsg = "❌ JSON ফাইলের গঠন ভুল। এটি Array of Objects হিসেবে থাকা উচিত।";
-                }
-
-                if (!success && errorMsg === "") {
-                    errorMsg = "❌ ভুল ID/Password. কেস-সেনসিটিভ ইনপুট চেক করুন।";
-                }
-
-            } catch (e) {
-                if (e.name === 'AbortError') {
-                    errorMsg = "⚠️ সংযোগ বিচ্ছিন্ন হয়েছে (Timeout)। ফাইল লোড হতে ব্যর্থ।";
-                } else {
-                    console.error("Login Fetch Error:", e);
-                    errorMsg = `নেটওয়ার্ক বা ফাইল লোড সমস্যা: ${e.message.substring(0, 50)}`;
-                }
-            } finally {
-                setLoadingState(false);
-                if (success) {
-                    if (elements.rememberMe.checked) {
-                        localStorage.setItem(AUTH_STORAGE_KEY, 'true');
-                    }
-                    showMessage('Login Successful', '✅ Login সফল হয়েছে', false, () => {
-                        // On OK, transition to dashboard
-                        showView('dashboardView');
-                        applyTheme(getSavedTheme());
-                    });
-                } else {
-                    showMessage('Login Failed', errorMsg, true);
-                }
-            }
-        };
-
-        // --- Function to Check Remote JSON Data (Debugging Tool) ---
-        const checkRemoteJsonData = async () => {
-            elements.jsonContent.textContent = "ডেটা লোড হচ্ছে...";
-            elements.jsonLoadingSpinner.classList.remove('hidden');
-            
-            try {
-                const response = await fetch(LOGIN_JSON_URL, { signal: AbortSignal.timeout(10000) });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status} (${response.statusText})`);
-                }
-                
-                const rawText = await response.text();
-                
-                try {
-                    const jsonObject = JSON.parse(rawText);
-                    const formattedJson = JSON.stringify(jsonObject, null, 2);
-                    
-                    elements.jsonContent.innerHTML = `
-                        <p class="text-green-600 font-semibold mb-2">✅ ফাইল সফলভাবে লোড হয়েছে।</p>
-                        <p class="text-sm text-gray-500 mb-2">এই কাঠামোয় আপনার সঠিক 'username' এবং 'password' আছে কিনা, চেক করুন:</p>
-                        <pre class="bg-white p-3 rounded-md border border-gray-200 overflow-x-auto text-xs">${formattedJson}</pre>
-                        <p class="text-red-500 mt-2">যদি এটি একটি অ্যারে না হয়, তবে লগইন ব্যর্থ হবে।</p>
-                    `;
-
-                } catch (e) {
-                    // Not valid JSON
-                    elements.jsonContent.innerHTML = `
-                        <p class="text-red-600 font-semibold mb-2">❌ ডেটা JSON ফরম্যাটে নেই।</p>
-                        <p class="text-sm text-gray-500 mb-2">কাঁচা টেক্সট ডেটা (প্রথম 500 অক্ষর):</p>
-                        <pre class="bg-white p-3 rounded-md border border-gray-200 overflow-x-auto text-xs">${rawText.substring(0, 500)}...</pre>
-                    `;
-                }
-
-            } catch (e) {
-                elements.jsonContent.innerHTML = `
-                    <p class="text-red-600 font-semibold mb-2">❌ ডেটা লোড করার সময় সমস্যা।</p>
-                    <p class="text-sm text-gray-500">সম্ভাব্য কারণ (নেটওয়ার্ক/CORS/Timeout): ${e.message}</p>
-                    <p class="mt-2 text-xs text-gray-400">আপনার গিটহাব লিঙ্কটি অ্যাক্সেসযোগ্য কিনা, পরীক্ষা করুন।</p>
-                `;
-            } finally {
-                elements.jsonLoadingSpinner.classList.add('hidden');
-            }
         };
 
 
@@ -876,80 +684,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             
             // 1. Initial Setup and Auth Check
-            checkAuthStatus(); // Determines initial view
+            checkAuthStatus(); // Determines initial view (now always Dashboard)
             populateThemeOptions();
             
-            // 2. Login View Listeners
-            
-            // Show/Hide Password
-            elements.showHideBtn.addEventListener('click', () => {
-                isPasswordVisible = !isPasswordVisible;
-                if (isPasswordVisible) {
-                    elements.passwordInput.setAttribute('type', 'text');
-                    // Icon for visibility ON
-                    elements.visibilityIcon.innerHTML = '<path d="M2 12s5 7 10 7 10-7 10-7-5-7-10-7-10 7-10 7zm10 5a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path>';
-                } else {
-                    elements.passwordInput.setAttribute('type', 'password');
-                    // Icon for visibility OFF
-                    elements.visibilityIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
-                }
-            });
-
-            // Manual Login Button
-            elements.loginBtn.addEventListener('click', () => {
-                const user = elements.usernameInput.value.trim();
-                const pass = elements.passwordInput.value.trim();
-                
-                if (user.length === 0 || pass.length === 0) {
-                    showMessage('Input Required', 'ID/Password 🔑 দিন !!!!!', true);
-                } else {
-                    verifyLogin(user, pass);
-                }
-            });
-            
-            // Handle Enter keypress on Password input
-            elements.passwordInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    elements.loginBtn.click();
-                }
-            });
-
-            // Google Sign-In (Simulated)
-            elements.btnGoogleSignIn.addEventListener('click', () => {
-                // Simulates the successful sign-in flow
-                const mockUserName = 'GoogleUser@example.com';
-                
-                // Show a brief success message and transition
-                showMessage('Welcome', `Welcome, ${mockUserName}`, false, () => {
-                    localStorage.setItem(AUTH_STORAGE_KEY, 'true');
-                    showView('dashboardView');
-                    applyTheme(getSavedTheme());
-                });
-            });
-
-            // Forgot Password (Simulated)
-            elements.forgotPassword.addEventListener('click', () => {
-                showMessage('Forgot Password', 'This will redirect to the Forgot Password page (Simulated).', false);
-            });
-
-            // JSON Debug Button
-            elements.checkJsonBtn.addEventListener('click', () => {
-                elements.jsonModal.classList.remove('hidden');
-                elements.jsonModal.classList.add('flex');
-                checkRemoteJsonData(); // Load data when modal opens
-            });
-
-            // Close JSON Debug Modal Button
-            elements.closeJsonModalButton.addEventListener('click', () => {
-                elements.jsonModal.classList.add('hidden');
-                elements.jsonModal.classList.remove('flex');
-            });
-
-
-            // 3. Dashboard and Search View Listeners (Existing)
+            // 2. Load History and Last Search
             loadSearchHistory();
             loadLastSearch();
+            
+            // 3. Dashboard and Search View Listeners
             
             // Site Search Card (Switch View)
             document.getElementById('cardSearch').addEventListener('click', () => {
@@ -984,11 +726,10 @@
                 elements.themeModal.classList.remove('flex');
             });
 
-            // Logout Button
+            // Logout Button (Now exits to the permanently hidden login screen)
             elements.logoutButton.addEventListener('click', () => {
                 showMessage('Logout Confirmation', 'আপনি কি সত্যিই লগ আউট করতে চান?', false, () => {
-                    // Confirmed Logout Action
-                    localStorage.removeItem(AUTH_STORAGE_KEY);
+                    // Confirmed Logout Action: Switches to the now-hidden loginView
                     showView('loginView');
                 });
             });
