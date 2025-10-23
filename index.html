@@ -5,28 +5,213 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login — GPIDATA</title>
   <style>
-    body { background: #ffffff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 24px; }
-    .container { max-width: 400px; margin: 0 auto; text-align: center; }
-    img.logo { width: 173px; height: 90px; margin-top: 50px; object-fit: contain; }
-    .input-field { width: 100%; height: 50px; margin-top: 20px; border: 1px solid #d1d5db; border-radius: 25px; padding: 0 16px; font-size: 16px; outline: none; transition: 0.15s; box-sizing: border-box; }
-    .input-field:focus { border-color: #ff6600; }
-    .checkbox { margin-top: 16px; text-align: left; }
-    .btn { width: 100%; height: 50px; margin-top: 24px; background: #ff6600; color: #fff; font-size: 16px; font-weight: 600; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 3px 5px rgba(0,0,0,0.12); transition: 0.15s; }
-    .btn:active { transform: translateY(1px); }
-    .forgot { display: block; margin-top: 20px; color: #ff6600; text-decoration: none; font-size: 14px; }
-    .show-hide { position: absolute; right: 35px; top: 13px; cursor: pointer; color: #888; user-select: none; }
-    .password-container { position: relative; width: 100%; }
-    .msg { margin-top:12px; color:#b91c1c; font-size:14px; display:none; }
+    /* --- আধুনিক স্টাইল শুরু --- */
+    body {
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb); /* গ্র্যাডিয়েন্ট ব্যাকগ্রাউন্ড */
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 420px;
+      width: 100%;
+      margin: 0 auto;
+      text-align: center;
+      background: #ffffff;
+      padding: 40px 32px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #ff6600, #e65c00);
+    }
+
+    img.logo {
+      width: 140px;
+      height: auto;
+      margin-bottom: 32px;
+      object-fit: contain;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 48px;
+      margin-top: 20px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 0 16px;
+      font-size: 15px;
+      outline: none;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+      background: #f9fafb;
+    }
+
+    .input-field:focus {
+      border-color: #ff6600;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(255, 102, 0, 0.15);
+    }
+
+    .input-field:invalid:not(:placeholder-shown) {
+      border-color: #b91c1c;
+    }
+
+    .checkbox {
+      margin-top: 20px;
+      text-align: left;
+      font-size: 14px;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      user-select: none;
+    }
+
+    .checkbox input {
+      margin-right: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      height: 50px;
+      margin-top: 28px;
+      background: linear-gradient(90deg, #ff6600, #e65c00);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      background: linear-gradient(90deg, #e65c00, #cc5200);
+      box-shadow: 0 6px 15px rgba(255, 102, 0, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+    }
+
+    .btn:disabled {
+      background: #f97316;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn.loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .forgot {
+      display: block;
+      margin-top: 20px;
+      color: #ff6600;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .forgot:hover {
+      color: #e65c00;
+      text-decoration: underline;
+    }
+
+    .password-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .show-hide {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-top: 10px;
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 18px;
+      transition: color 0.2s ease;
+    }
+
+    .show-hide:hover {
+      color: #ff6600;
+    }
+
+    .msg {
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+    }
+
+    .msg.error {
+      color: #b91c1c;
+    }
+
+    .msg.success {
+      color: #14532d;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 24px 20px;
+      }
+      img.logo {
+        width: 120px;
+      }
+      .input-field {
+        height: 44px;
+        font-size: 14px;
+      }
+      .btn {
+        height: 46px;
+        font-size: 15px;
+      }
+    }
+    /* --- আধুনিক স্টাইল শেষ --- */
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="banglalink_logo.png" alt="Logo" class="logo" />
+    <img src="https://static.vecteezy.com/system/resources/previews/020/838/849/original/site-finder-logo-file-free-vector.jpg" alt="Logo" class="logo" />
 
-    <input id="username" class="input-field" type="text" placeholder="Username / ID" autocomplete="username" />
+    <input id="username" class="input-field" type="text" placeholder="ইউজারনেম / আইডি" autocomplete="username" required />
 
     <div class="password-container">
-      <input id="password" class="input-field" type="password" placeholder="Password" autocomplete="current-password" />
+      <input id="password" class="input-field" type="password" placeholder="পাসওয়ার্ড" autocomplete="current-password" required />
       <span class="show-hide" id="togglePassword">👁️</span>
     </div>
 
@@ -34,101 +219,103 @@
       <label><input type="checkbox" id="remember" /> Remember Me</label>
     </div>
 
-    <button class="btn" id="loginBtn">Sign In</button>
+    <button class="btn" id="loginBtn">সাইন ইন</button>
 
-    <a href="#" class="forgot" id="forgot">Forgot Password?</a>
+    <a href="#" class="forgot" id="forgot">পাসওয়ার্ড ভুলে গেছেন?</a>
 
     <div id="message" class="msg"></div>
   </div>
 
-<script>
-/*
-  Login logic:
-  - Fetch users list from GitHub login.json
-  - Check credentials
-  - On success: if Remember Me -> store isLoggedIn in localStorage
-  - Redirect to dashboard.html on success
-  - Auto-redirect if already logged in
-*/
+  <script>
+    const LOGIN_JSON_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/login.json";
 
-const LOGIN_JSON_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/login.json";
+    // Elements
+    const usernameEl = document.getElementById('username');
+    const passwordEl = document.getElementById('password');
+    const rememberEl = document.getElementById('remember');
+    const loginBtn = document.getElementById('loginBtn');
+    const messageEl = document.getElementById('message');
+    const togglePass = document.getElementById('togglePassword');
+    const forgot = document.getElementById('forgot');
 
-// Elements
-const usernameEl = document.getElementById('username');
-const passwordEl = document.getElementById('password');
-const rememberEl = document.getElementById('remember');
-const loginBtn = document.getElementById('loginBtn');
-const messageEl = document.getElementById('message');
-const togglePass = document.getElementById('togglePassword');
-const forgot = document.getElementById('forgot');
+    // Show/hide password
+    togglePass.addEventListener('click', () => {
+      const type = passwordEl.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordEl.setAttribute('type', type);
+      togglePass.textContent = type === 'password' ? '👁️' : '🙈';
+    });
 
-// Show/hide password
-togglePass.addEventListener('click', () => {
-  const type = passwordEl.getAttribute('type') === 'password' ? 'text' : 'password';
-  passwordEl.setAttribute('type', type);
-  togglePass.textContent = type === 'password' ? '👁️' : '🙈';
-});
-
-// Auto-redirect if remembered
-if (localStorage.getItem('isLoggedIn') === 'true') {
-  // optionally you can check saved username too
-  window.location.href = 'dashboard.html';
-}
-
-// Helper: show message
-function showMessage(text, isError=true) {
-  messageEl.style.display = 'block';
-  messageEl.style.color = isError ? '#b91c1c' : '#14532d';
-  messageEl.textContent = text;
-}
-
-// Main login handler
-loginBtn.addEventListener('click', async () => {
-  messageEl.style.display = 'none';
-  const user = usernameEl.value.trim();
-  const pass = passwordEl.value.trim();
-
-  if (!user || !pass) { showMessage('Username এবং Password দুটোই দিন।'); return; }
-
-  loginBtn.disabled = true;
-  loginBtn.textContent = 'Checking...';
-
-  try {
-    const res = await fetch(LOGIN_JSON_URL, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Network response not OK');
-
-    const data = await res.json();
-
-    // data expected to be an array of objects [{username:"...",password:"..."}, ...]
-    const match = Array.isArray(data) ? data.find(u => String(u.username) === user && String(u.password) === pass) : null;
-
-    if (match) {
-      // success
-      if (rememberEl.checked) {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('gpidata_user', user);
-      }
-      // small friendly message then redirect
-      showMessage('✅ Login successful — Redirecting...', false);
-      setTimeout(() => window.location.href = 'dashboard.html', 700);
-    } else {
-      showMessage('ভুল Username অথবা Password।', true);
+    // Auto-redirect if remembered
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      window.location.href = 'dashboard.html';
     }
 
-  } catch (err) {
-    console.error(err);
-    showMessage('নেটওয়ার্ক সমস্যা বা সার্ভার থেকে ডেটা পেলাম না।', true);
-  } finally {
-    loginBtn.disabled = false;
-    loginBtn.textContent = 'Sign In';
-  }
-});
+    // Helper: show message
+    function showMessage(text, isError = true) {
+      messageEl.style.display = 'block';
+      messageEl.className = `msg ${isError ? 'error' : 'success'}`;
+      messageEl.textContent = text;
+      setTimeout(() => {
+        messageEl.style.display = 'none';
+      }, 5000); // 5 সেকেন্ড পর মেসেজ লুকানো হবে
+    }
 
-// Forgot password behavior
-forgot.addEventListener('click', (e) => {
-  e.preventDefault();
-  alert('Forgot Password: আপনার GitHub login.json ফাইলে ব্যবস্থাপনা করুন বা admin এর সাথে যোগাযোগ করুন।');
-});
-</script>
+    // Real-time input validation
+    [usernameEl, passwordEl].forEach(input => {
+      input.addEventListener('input', () => {
+        if (input.value.trim()) {
+          input.classList.remove('error');
+        }
+      });
+    });
+
+    // Main login handler
+    loginBtn.addEventListener('click', async () => {
+      messageEl.style.display = 'none';
+      const user = usernameEl.value.trim();
+      const pass = passwordEl.value.trim();
+
+      if (!user || !pass) {
+        showMessage('ইউজারনেম এবং পাসওয়ার্ড দুটোই প্রয়োজন।');
+        return;
+      }
+
+      loginBtn.disabled = true;
+      loginBtn.classList.add('loading');
+      loginBtn.textContent = 'চেক করা হচ্ছে...';
+
+      try {
+        const res = await fetch(LOGIN_JSON_URL, { cache: 'no-store' });
+        if (!res.ok) throw new Error('Network response not OK');
+
+        const data = await res.json();
+        const match = Array.isArray(data) ? data.find(u => String(u.username) === user && String(u.password) === pass) : null;
+
+        if (match) {
+          if (rememberEl.checked) {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('gpidata_user', user);
+          }
+          showMessage('✅ সফলভাবে লগইন — রিডাইরেক্ট হচ্ছে...', false);
+          setTimeout(() => window.location.href = 'dashboard.html', 700);
+        } else {
+          showMessage('ভুল ইউজারনেম অথবা পাসওয়ার্ড।');
+        }
+      } catch (err) {
+        console.error(err);
+        showMessage('নেটওয়ার্ক সমস্যা বা সার্ভার থেকে ডেটা পাওয়া যায়নি।');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.classList.remove('loading');
+        loginBtn.textContent = 'সাইন ইন';
+      }
+    });
+
+    // Forgot password behavior
+    forgot.addEventListener('click', (e) => {
+      e.preventDefault();
+      showMessage('পাসওয়ার্ড রিসেটের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।');
+    });
+  </script>
 </body>
 </html>
