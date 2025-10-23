@@ -14,9 +14,17 @@
 <body class="flex flex-col min-h-screen">
 
     <!-- Toolbar -->
-    <div class="bg-blue-600 text-black py-4 px-4 shadow-md flex justify-between items-center">
-        <h1 class="text-xl font-semibold">GPIDATA</h1>
-        <button id="logoutBtn" class="bg-red-500 text-white px-4 py-1 rounded">Logout</button>
+    <div class="bg-blue-600 text-white py-4 px-4 shadow-md flex justify-between items-center">
+        <!-- Left Side: Back Button and Title -->
+        <div class="flex items-center space-x-3">
+            <button id="backBtn" class="text-2xl font-bold p-1 rounded-full hover:bg-blue-700 transition duration-150" title="ড্যাশবোর্ডে ফিরে যান">
+                &leftarrow;
+            </button>
+            <h1 class="text-xl font-semibold">GPIDATA</h1>
+        </div>
+        
+        <!-- Right Side: Logout Button -->
+        <button id="logoutBtn" class="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition duration-150">Logout</button>
     </div>
 
     <!-- Main Content -->
@@ -68,25 +76,34 @@
         const openMapBtn = document.getElementById('openMapBtn');
         const checkUpdateBtn = document.getElementById('checkUpdateBtn');
         const logoutBtn = document.getElementById('logoutBtn');
+        const backBtn = document.getElementById('backBtn'); // New: Back button reference
 
         let finalResult = "";
         let currentLat = 0.0;
         let currentLong = 0.0;
 
-        // ---------- Logout ----------
+        // ---------- Back Button (Dashboard) ----------
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                console.log("Navigating to Dashboard.");
+                window.location.href = 'dashboard.html'; 
+            });
+        }
+
+        // ---------- Logout (Goes to index.html) ----------
         logoutBtn.addEventListener('click', () => {
-            if (confirm("আপনি কি লগআউট করতে চান?")) {
-                localStorage.clear();
-                alert("🔒 Logout Successful");
-                location.reload();
-            }
+            console.log("Logout initiated.");
+            localStorage.clear();
+            console.log("Logout Successful. Redirecting to index.html");
+            // Change: Navigate to index.html
+            window.location.href = 'index.html'; 
         });
 
         // ---------- Search Function ----------
         searchBtn.addEventListener('click', async () => {
             const query = searchBox.value.trim();
             if (!query) {
-                alert("Site ID দিন");
+                resultText.innerText = "Site ID দিন";
                 return;
             }
 
@@ -112,7 +129,8 @@
                     const sheetArray = data[sheetName];
                     sheetArray.forEach(rowObj => {
                         for (const key in rowObj) {
-                            const value = rowObj[key].trim();
+                            // FIX: Ensure the value is a string before calling trim()
+                            const value = String(rowObj[key]).trim();
                             if (value) resultBuilder += `➤ ${key} = ${value}\n`;
                         }
                         if (rowObj.Latitude && rowObj.Longitude) {
@@ -147,23 +165,31 @@
         // ---------- Copy Button ----------
         copyBtn.addEventListener('click', () => {
             if (!finalResult) {
-                alert("❗ আগে সার্চ করুন");
+                resultText.innerText = "❗ আগে সার্চ করুন";
                 return;
             }
-            navigator.clipboard.writeText(finalResult);
-            alert("✅ সব ডেটা কপি হয়েছে");
+            // Use document.execCommand('copy') for better compatibility in iframes
+            const tempInput = document.createElement('textarea');
+            tempInput.value = finalResult;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            resultText.innerText = "✅ সব ডেটা কপি হয়েছে";
         });
 
         // ---------- Share Button ----------
         shareBtn.addEventListener('click', () => {
             if (!finalResult) {
-                alert("❗ আগে সার্চ করুন");
+                resultText.innerText = "❗ আগে সার্চ করুন";
                 return;
             }
             if (navigator.share) {
                 navigator.share({ text: finalResult });
             } else {
-                prompt("কপি করে শেয়ার করুন:", finalResult);
+                // Fallback for sharing (e.g., prompting user to copy manually)
+                resultText.innerText = "কপি করে শেয়ার করুন: " + finalResult;
             }
         });
 
