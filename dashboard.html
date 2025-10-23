@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Finder Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* ===== Theme Classes ===== */
+body.default-theme { background-color:#ffffff; color:#000000; }
+body.dark-theme { background-color:#1D1D1D; color:#DEDEDE; }
+body.ocean-theme { background-color:#00CED1; color:#ffffff; }
+body.sunset-theme { background-color:#FF8C00; color:#ffffff; }
+
+/* ===== Card Theme Adapt ===== */
+.card { transition: background-color 0.3s, color 0.3s; }
+.default-theme .card { background-color:#f3f4f6; color:#1f2937; }
+.dark-theme .card { background-color:#2c2c2c; color:#f3f4f6; }
+.ocean-theme .card { background-color:#14b8a6; color:#ffffff; }
+.sunset-theme .card { background-color:#fb923c; color:#ffffff; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="p-6 text-center">
+    <p class="text-red-600 text-lg">Welcome To,</p>
+    <h1 class="text-orange-500 text-3xl font-bold mt-1">SITE FINDER APP</h1>
+</div>
+
+<!-- Grid Menu -->
+<div class="grid grid-cols-2 gap-4 p-4">
+
+    <!-- 1) Site Search -->
+    <a href="search.html" class="card rounded shadow p-6 flex flex-col items-center justify-center hover:opacity-90">
+        <span class="text-4xl">🔎</span>
+        <span class="mt-2 font-bold">Site Search</span>
+    </a>
+
+    <!-- 2) Web Link -->
+    <a href="web.html" class="card rounded shadow p-6 flex flex-col items-center justify-center hover:opacity-90">
+        <span class="text-4xl">🌐</span>
+        <span class="mt-2 font-bold">Web Link</span>
+    </a>
+
+    <!-- 3) Calculator -->
+    <a href="calculator.html" class="card rounded shadow p-6 flex flex-col items-center justify-center hover:opacity-90">
+        <span class="text-4xl">🧮</span>
+        <span class="mt-2 font-bold">Calculator</span>
+    </a>
+
+    <!-- 4) Instruction -->
+    <a href="instruction.html" class="card rounded shadow p-6 flex flex-col items-center justify-center hover:opacity-90">
+        <span class="text-4xl">📖</span>
+        <span class="mt-2 font-bold">Instruction</span>
+    </a>
+
+    <!-- 5) Developer Info -->
+    <a href="developer.html" class="card rounded shadow p-6 flex flex-col items-center justify-center hover:opacity-90">
+        <span class="text-4xl">👨‍💻</span>
+        <span class="mt-2 font-bold">Developer</span>
+    </a>
+
+    <!-- 6) Theme -->
+    <a href="theme.html" class="card rounded shadow p-6 flex flex-col items-center justify-center hover:opacity-90">
+        <span class="text-4xl">🎨</span>
+        <span class="mt-2 font-bold">Theme</span>
+    </a>
+
+</div>
+
+<!-- Fixed Logout Button -->
+<div class="p-4">
+    <button onclick="confirmLogout()" 
+        class="w-full bg-red-600 text-white font-bold text-lg py-3 rounded hover:bg-red-700">
+        🚪 Logout
+    </button>
+</div>
+
+<script>
+// ===== Load Saved Theme =====
+let currentTheme = localStorage.getItem('selectedTheme') || 'default';
+document.body.classList.add(currentTheme + '-theme');
+
+// ===== Logout Function =====
+function confirmLogout() {
+    if (confirm("আপনি কি সত্যিই লগ আউট করতে চান?")) {
+        localStorage.clear();
+        window.location.href = "index.html";
+    }
+}
+</script>
+
+</body>
+</html>
