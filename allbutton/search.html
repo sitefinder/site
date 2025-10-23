@@ -1,75 +1,157 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Site Finder Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPIDATA</title>
+<style>
+  body { margin:0; font-family:sans-serif; background:#F9FAFC; color:#222; }
+  header { background:#3F51B5; color:#fff; padding:16px; text-align:center; font-size:20px; font-weight:600; }
+  .container { max-width:600px; margin:20px auto; padding:0 16px; }
+  input, button, textarea { font-family:sans-serif; }
+  input { width:100%; padding:12px 16px; font-size:16px; border-radius:25px; border:1px solid #ccc; margin-bottom:16px; }
+  button { width:100%; padding:12px; font-size:16px; border:none; border-radius:8px; margin-bottom:12px; cursor:pointer; color:#fff; }
+  button.copy { background:#FF9800; }
+  button.share { background:#2196F3; }
+  button.search { background:#3F51B5; }
+  button.map { background:#4CAF50; display:none; }
+  button.update { background:#FF5252; display:none; }
+  #result { background:#fff; padding:16px; min-height:100px; border-radius:8px; line-height:1.5; white-space:pre-wrap; overflow-x:auto; margin-bottom:16px; }
+  #progress { display:none; margin:0 auto 16px auto; }
+  footer { text-align:center; color:#999; font-size:14px; margin-top:40px; }
+</style>
 </head>
-<body class="bg-white font-sans">
+<body>
 
-    <!-- Header -->
-    <div class="p-6 text-center">
-        <p class="text-red-600 text-lg">Welcome To,</p>
-        <h1 class="text-orange-500 text-3xl font-bold mt-1">SITE FINDER APP</h1>
-    </div>
+<header>GPIDATA</header>
 
-    <!-- Grid Menu -->
-    <div class="grid grid-cols-2 gap-4 p-4">
+<div class="container">
+  <button id="checkUpdateBtn" class="update">⬇️ অ্যাপ আপডেট করুন</button>
 
-        <!-- 1) Site Search -->
-        <a href="search.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
-            <span class="text-4xl">🔎</span>
-            <span class="mt-2 font-bold text-gray-800">Site Search</span>
-        </a>
+  <input type="text" id="searchBox" placeholder="Site ID লিখুন">
 
-        <!-- 2) Web Link -->
-        <a href="web.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
-            <span class="text-4xl">🌐</span>
-            <span class="mt-2 font-bold text-gray-800">Web Link</span>
-        </a>
+  <button id="searchBtn" class="search">🔍 Search</button>
 
-        <!-- 3) Calculator -->
-        <a href="calculator.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
-            <span class="text-4xl">🧮</span>
-            <span class="mt-2 font-bold text-gray-800">Calculator</span>
-        </a>
+  <div id="progress">⏳ Loading...</div>
 
-        <!-- 4) Instruction -->
-        <a href="instruction.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
-            <span class="text-4xl">📖</span>
-            <span class="mt-2 font-bold text-gray-800">Instruction</span>
-        </a>
+  <div id="result"></div>
 
-        <!-- 5) Developer Info -->
-        <a href="developer.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
-            <span class="text-4xl">👨‍💻</span>
-            <span class="mt-2 font-bold text-gray-800">Developer</span>
-        </a>
+  <div style="display:flex; gap:12px; margin-bottom:16px;">
+    <button id="copyBtn" class="copy" style="flex:1;">📋 All Text Copy</button>
+    <button id="shareBtn" class="share" style="flex:1;">📤 শেয়ার করুন</button>
+  </div>
 
-        <!-- 6) Theme -->
-        <a href="theme.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
-            <span class="text-4xl">🎨</span>
-            <span class="mt-2 font-bold text-gray-800">Theme</span>
-        </a>
+  <button id="openMapBtn" class="map">📍 লোকেশন দেখুন (Google Maps)</button>
+</div>
 
-    </div>
+<footer>
+  <div id="author_name"></div>
+  <div id="version_name"></div>
+</footer>
 
-    <!-- Fixed Logout Button -->
-    <div class="p-4">
-        <button onclick="confirmLogout()" 
-            class="w-full bg-red-600 text-white font-bold text-lg py-3 rounded hover:bg-red-700">
-            🚪 Logout
-        </button>
-    </div>
+<script>
+const jsonUrl = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec";
+const versionCheckUrl = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/version.json";
+const currentVersion = "5.0.1";
 
-    <script>
-        function confirmLogout() {
-            if (confirm("আপনি কি সত্যিই লগ আউট করতে চান?")) {
-                window.location.href = "index.html"; // এখানে যেকোনো logout page বসাতে পারো
-            }
+let searchHistory = JSON.parse(localStorage.getItem("search_history") || "[]");
+let lastSearch = localStorage.getItem("last_search") || "";
+
+const searchBox = document.getElementById("searchBox");
+const searchBtn = document.getElementById("searchBtn");
+const copyBtn = document.getElementById("copyBtn");
+const shareBtn = document.getElementById("shareBtn");
+const openMapBtn = document.getElementById("openMapBtn");
+const resultDiv = document.getElementById("result");
+const progressDiv = document.getElementById("progress");
+const checkUpdateBtn = document.getElementById("checkUpdateBtn");
+
+let finalResult = "";
+let currentLat = 0.0;
+let currentLong = 0.0;
+
+// Load last search
+searchBox.value = lastSearch;
+
+// ---------- Search Button ----------
+searchBtn.addEventListener("click", async () => {
+  const query = searchBox.value.trim();
+  if(!query){ alert("Site ID দিন"); return; }
+
+  localStorage.setItem("last_search", query);
+  if(!searchHistory.includes(query)){ searchHistory.push(query); localStorage.setItem("search_history", JSON.stringify(searchHistory)); }
+
+  resultDiv.textContent = "";
+  progressDiv.style.display = "block";
+  openMapBtn.style.display = "none";
+  finalResult = "";
+  currentLat = 0.0;
+  currentLong = 0.0;
+
+  try {
+    const resp = await fetch(jsonUrl + "?site=" + encodeURIComponent(query));
+    const data = await resp.json();
+
+    let resText = "";
+    for(const sheet in data){
+      data[sheet].forEach(row => {
+        for(const key in row){
+          if(row[key].trim()) resText += `➤ ${key} = ${row[key]}\n`;
         }
-    </script>
+        if(row.Latitude && row.Longitude){
+          currentLat = parseFloat(row.Latitude);
+          currentLong = parseFloat(row.Longitude);
+        }
+      });
+    }
+
+    finalResult = resText.trim();
+    resultDiv.textContent = finalResult || "❌ কোনো তথ্য পাওয়া যায়নি।";
+    if(currentLat && currentLong) openMapBtn.style.display = "block";
+  } catch(e){
+    resultDiv.textContent = "⚠️ ডেটা লোড করতে সমস্যা হয়েছে";
+  } finally {
+    progressDiv.style.display = "none";
+  }
+});
+
+// ---------- Copy Button ----------
+copyBtn.addEventListener("click", () => {
+  if(!finalResult){ alert("❗ আগে সার্চ করুন"); return; }
+  navigator.clipboard.writeText(finalResult);
+  alert("✅ সব ডেটা কপি হয়েছে");
+});
+
+// ---------- Share Button ----------
+shareBtn.addEventListener("click", () => {
+  if(!finalResult){ alert("❗ আগে সার্চ করুন"); return; }
+  if(navigator.share){
+    navigator.share({ text: finalResult }).catch(()=>{ alert("শেয়ার ব্যর্থ"); });
+  } else {
+    prompt("Copy and share:", finalResult);
+  }
+});
+
+// ---------- Google Maps ----------
+openMapBtn.addEventListener("click", () => {
+  if(currentLat && currentLong){
+    const url = `https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLong}`;
+    window.open(url, "_blank");
+  }
+});
+
+// ---------- Check Update ----------
+(async()=>{
+  try {
+    const resp = await fetch(versionCheckUrl);
+    const data = await resp.json();
+    if(data.version !== currentVersion){
+      checkUpdateBtn.style.display = "block";
+      checkUpdateBtn.addEventListener("click",()=>window.open(data.apkUrl,"_blank"));
+    }
+  } catch(e){ console.log("Update check failed"); }
+})();
+</script>
 
 </body>
 </html>
