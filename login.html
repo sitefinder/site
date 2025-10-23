@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — GPIDATA</title>
+  <style>
+    body { background: #ffffff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 24px; }
+    .container { max-width: 400px; margin: 0 auto; text-align: center; }
+    img.logo { width: 173px; height: 90px; margin-top: 50px; object-fit: contain; }
+    .input-field { width: 100%; height: 50px; margin-top: 20px; border: 1px solid #d1d5db; border-radius: 25px; padding: 0 16px; font-size: 16px; outline: none; transition: 0.15s; box-sizing: border-box; }
+    .input-field:focus { border-color: #ff6600; }
+    .checkbox { margin-top: 16px; text-align: left; }
+    .btn { width: 100%; height: 50px; margin-top: 24px; background: #ff6600; color: #fff; font-size: 16px; font-weight: 600; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 3px 5px rgba(0,0,0,0.12); transition: 0.15s; }
+    .btn:active { transform: translateY(1px); }
+    .forgot { display: block; margin-top: 20px; color: #ff6600; text-decoration: none; font-size: 14px; }
+    .show-hide { position: absolute; right: 35px; top: 13px; cursor: pointer; color: #888; user-select: none; }
+    .password-container { position: relative; width: 100%; }
+    .msg { margin-top:12px; color:#b91c1c; font-size:14px; display:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="banglalink_logo.png" alt="Logo" class="logo" />
+
+    <input id="username" class="input-field" type="text" placeholder="Username / ID" autocomplete="username" />
+
+    <div class="password-container">
+      <input id="password" class="input-field" type="password" placeholder="Password" autocomplete="current-password" />
+      <span class="show-hide" id="togglePassword">👁️</span>
+    </div>
+
+    <div class="checkbox">
+      <label><input type="checkbox" id="remember" /> Remember Me</label>
+    </div>
+
+    <button class="btn" id="loginBtn">Sign In</button>
+
+    <a href="#" class="forgot" id="forgot">Forgot Password?</a>
+
+    <div id="message" class="msg"></div>
+  </div>
+
+<script>
+/*
+  Login logic:
+  - Fetch users list from GitHub login.json
+  - Check credentials
+  - On success: if Remember Me -> store isLoggedIn in localStorage
+  - Redirect to dashboard.html on success
+  - Auto-redirect if already logged in
+*/
+
+const LOGIN_JSON_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/login.json";
+
+// Elements
+const usernameEl = document.getElementById('username');
+const passwordEl = document.getElementById('password');
+const rememberEl = document.getElementById('remember');
+const loginBtn = document.getElementById('loginBtn');
+const messageEl = document.getElementById('message');
+const togglePass = document.getElementById('togglePassword');
+const forgot = document.getElementById('forgot');
+
+// Show/hide password
+togglePass.addEventListener('click', () => {
+  const type = passwordEl.getAttribute('type') === 'password' ? 'text' : 'password';
+  passwordEl.setAttribute('type', type);
+  togglePass.textContent = type === 'password' ? '👁️' : '🙈';
+});
+
+// Auto-redirect if remembered
+if (localStorage.getItem('isLoggedIn') === 'true') {
+  // optionally you can check saved username too
+  window.location.href = 'dashboard.html';
+}
+
+// Helper: show message
+function showMessage(text, isError=true) {
+  messageEl.style.display = 'block';
+  messageEl.style.color = isError ? '#b91c1c' : '#14532d';
+  messageEl.textContent = text;
+}
+
+// Main login handler
+loginBtn.addEventListener('click', async () => {
+  messageEl.style.display = 'none';
+  const user = usernameEl.value.trim();
+  const pass = passwordEl.value.trim();
+
+  if (!user || !pass) { showMessage('Username এবং Password দুটোই দিন।'); return; }
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Checking...';
+
+  try {
+    const res = await fetch(LOGIN_JSON_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Network response not OK');
+
+    const data = await res.json();
+
+    // data expected to be an array of objects [{username:"...",password:"..."}, ...]
+    const match = Array.isArray(data) ? data.find(u => String(u.username) === user && String(u.password) === pass) : null;
+
+    if (match) {
+      // success
+      if (rememberEl.checked) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('gpidata_user', user);
+      }
+      // small friendly message then redirect
+      showMessage('✅ Login successful — Redirecting...', false);
+      setTimeout(() => window.location.href = 'dashboard.html', 700);
+    } else {
+      showMessage('ভুল Username অথবা Password।', true);
+    }
+
+  } catch (err) {
+    console.error(err);
+    showMessage('নেটওয়ার্ক সমস্যা বা সার্ভার থেকে ডেটা পেলাম না।', true);
+  } finally {
+    loginBtn.disabled = false;
+    loginBtn.textContent = 'Sign In';
+  }
+});
+
+// Forgot password behavior
+forgot.addEventListener('click', (e) => {
+  e.preventDefault();
+  alert('Forgot Password: আপনার GitHub login.json ফাইলে ব্যবস্থাপনা করুন বা admin এর সাথে যোগাযোগ করুন।');
+});
+</script>
+</body>
+</html>
