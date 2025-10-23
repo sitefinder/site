@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theme Selection</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body.default-theme { background-color:#ffffff; color:#000000; }
+body.dark-theme { background-color:#1D1D1D; color:#DEDEDE; }
+body.ocean-theme { background-color:#00CED1; color:#ffffff; }
+body.sunset-theme { background-color:#FF8C00; color:#ffffff; }
+
+.card { transition: all 0.3s; cursor: pointer; border: 2px solid #ccc; border-radius: 12px; padding:20px; text-align:center; }
+.card.selected { border-color:#000; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
+.card span { display:block; margin-top:10px; font-weight:bold; font-size:16px; }
+</style>
+</head>
+<body>
+
+<div class="p-6 text-center">
+    <h1 class="text-2xl font-bold mb-4">Theme নির্বাচন করুন</h1>
+    <p class="text-gray-700 mb-6" id="currentThemeText">Current Theme: Default</p>
+</div>
+
+<div class="grid grid-cols-2 gap-4 p-4">
+
+    <div id="defaultCard" class="card">Default</div>
+    <div id="darkCard" class="card">Dark</div>
+    <div id="oceanCard" class="card">Ocean</div>
+    <div id="sunsetCard" class="card">Sunset</div>
+
+</div>
+
+<div class="p-4">
+    <button onclick="goBack()" 
+        class="w-full bg-gray-500 text-white font-bold text-lg py-3 rounded hover:bg-gray-600">
+        🔙 Back
+    </button>
+</div>
+
+<script>
+// ===== Load Saved Theme =====
+let savedTheme = localStorage.getItem('selectedTheme') || 'default';
+applyTheme(savedTheme);
+
+// ===== Cards =====
+const cards = {
+    default: document.getElementById('defaultCard'),
+    dark: document.getElementById('darkCard'),
+    ocean: document.getElementById('oceanCard'),
+    sunset: document.getElementById('sunsetCard')
+};
+
+// ===== Highlight Current =====
+function highlightCard(theme) {
+    Object.keys(cards).forEach(t => cards[t].classList.remove('selected'));
+    if(cards[theme]) cards[theme].classList.add('selected');
+    document.getElementById('currentThemeText').innerText = "Current Theme: " + capitalize(theme);
+}
+
+// ===== Apply Theme =====
+function applyTheme(theme) {
+    document.body.classList.remove('default-theme','dark-theme','ocean-theme','sunset-theme');
+    document.body.classList.add(theme+'-theme');
+    highlightCard(theme);
+}
+
+// ===== Capitalize First Letter =====
+function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+// ===== Card Click Listeners =====
+Object.keys(cards).forEach(theme => {
+    cards[theme].addEventListener('click', () => {
+        localStorage.setItem('selectedTheme', theme);
+        applyTheme(theme);
+        alert("Theme set to " + capitalize(theme) + ". Dashboard এ ফিরে যাচ্ছেন...");
+        window.location.href = 'index.html'; // Dashboard বা main page
+    });
+});
+
+// ===== Back Button =====
+function goBack() {
+    window.location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>
