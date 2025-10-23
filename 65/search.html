@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Finder Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white font-sans">
 
+    <!-- Header -->
+    <div class="p-6 text-center">
+        <p class="text-red-600 text-lg">Welcome To,</p>
+        <h1 class="text-orange-500 text-3xl font-bold mt-1">SITE FINDER APP</h1>
+    </div>
+
+    <!-- Grid Menu -->
+    <div class="grid grid-cols-2 gap-4 p-4">
+
+        <!-- 1) Site Search -->
+        <a href="search.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
+            <span class="text-4xl">🔎</span>
+            <span class="mt-2 font-bold text-gray-800">Site Search</span>
+        </a>
+
+        <!-- 2) Web Link -->
+        <a href="web.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
+            <span class="text-4xl">🌐</span>
+            <span class="mt-2 font-bold text-gray-800">Web Link</span>
+        </a>
+
+        <!-- 3) Calculator -->
+        <a href="calculator.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
+            <span class="text-4xl">🧮</span>
+            <span class="mt-2 font-bold text-gray-800">Calculator</span>
+        </a>
+
+        <!-- 4) Instruction -->
+        <a href="instruction.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
+            <span class="text-4xl">📖</span>
+            <span class="mt-2 font-bold text-gray-800">Instruction</span>
+        </a>
+
+        <!-- 5) Developer Info -->
+        <a href="developer.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
+            <span class="text-4xl">👨‍💻</span>
+            <span class="mt-2 font-bold text-gray-800">Developer</span>
+        </a>
+
+        <!-- 6) Theme -->
+        <a href="theme.html" class="bg-gray-100 rounded shadow p-6 flex flex-col items-center justify-center hover:bg-gray-200">
+            <span class="text-4xl">🎨</span>
+            <span class="mt-2 font-bold text-gray-800">Theme</span>
+        </a>
+
+    </div>
+
+    <!-- Fixed Logout Button -->
+    <div class="p-4">
+        <button onclick="confirmLogout()" 
+            class="w-full bg-red-600 text-white font-bold text-lg py-3 rounded hover:bg-red-700">
+            🚪 Logout
+        </button>
+    </div>
+
+    <script>
+        function confirmLogout() {
+            if (confirm("আপনি কি সত্যিই লগ আউট করতে চান?")) {
+                window.location.href = "index.html"; // এখানে যেকোনো logout page বসাতে পারো
+            }
+        }
+    </script>
+
+</body>
+</html>
