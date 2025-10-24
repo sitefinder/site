@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPIDATA</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .input-focus:focus {
+            outline: none;
+            ring: 2px solid #a78bfa;
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+        }
+        .scrollbar::-webkit-scrollbar { width: 8px; }
+        .scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+        .scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.4); border-radius: 10px; }
+        .scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.6); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; }
+
+        .btn-gradient {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+        .btn-blue {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+        .btn-blue:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+        }
+        .btn-green {
+            background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+            box-shadow: 0 4px 15px rgba(86, 171, 47, 0.3);
+        }
+        .btn-green:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(86, 171, 47, 0.4);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-white">
+
+    <!-- Toolbar -->
+    <header class="glass py-4 px-5 shadow-lg">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <button id="backBtn" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all duration-200">
+                    <i data-feather="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">
+                    GPIDATA
+                </h1>
+            </div>
+            <button id="logoutBtn" class="btn-gradient text-white px-5 py-2 rounded-full font-medium flex items-center gap-2">
+                <i data-feather="log-out" class="w-4 h-4"></i>
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-5 max-w-4xl mx-auto w-full">
+        <div class="space-y-5">
+
+            <!-- Update Button -->
+            <button id="checkUpdateBtn" class="w-full btn-gradient text-white py-4 rounded-2xl font-semibold text-lg hidden animate-pulse flex items-center justify-center gap-2">
+                <i data-feather="download" class="w-5 h-5"></i>
+                অ্যাপ আপডেট করুন
+            </button>
+
+            <!-- Search Box -->
+            <div class="relative group">
+                <input type="text" id="searchBox" placeholder=" " 
+                       class="w-full h-14 px-5 pl-12 rounded-2xl glass text-white placeholder-white/70 input-focus transition-all duration-300">
+                <i data-feather="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/70 pointer-events-none"></i>
+                <label class="absolute left-12 top-1/2 transform -translate-y-1/2 text-white/70 pointer-events-none transition-all duration-300 
+                              group-focus-within:top-3 group-focus-within:text-xs group-focus-within:text-purple-300">
+                    Site ID লিখুন
+                </label>
+            </div>
+
+            <!-- Search Button -->
+            <button id="searchBtn" class="w-full h-14 btn-blue text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-all duration-300">
+                <i data-feather="search" class="w-5 h-5"></i>
+                Search
+            </button>
+
+            <!-- Progress Spinner -->
+            <div id="progressBar" class="w-12 h-12 mx-auto border-4 border-white/30 border-t-purple-400 rounded-full animate-spin hidden"></div>
+
+            <!-- Result Card -->
+            <div id="resultText" class="glass p-5 rounded-2xl min-h-[120px] text-sm text-white/90 leading-relaxed scrollbar scrollable overflow-y-auto max-h-80 opacity-0"></div>
+
+            <!-- Action Buttons -->
+            <div class="flex gap-3 mt-4 opacity-0" id="actionButtons">
+                <button id="copyBtn" class="flex-1 btn-gradient text-white py-3 rounded-2xl font-medium flex items-center justify-center gap-2">
+                    <i data-feather="copy" class="w-5 h-5"></i>
+                    All Text Copy
+                </button>
+                <button id="shareBtn" class="flex-1 btn-blue text-white py-3 rounded-2xl font-medium flex items-center justify-center gap-2">
+                    <i data-feather="share-2" class="w-5 h-5"></i>
+                    শেয়ার করুন
+                </button>
+            </div>
+
+            <!-- Open Map Button -->
+            <button id="openMapBtn" class="w-full btn-green text-white py-4 mt-4 rounded-2xl font-semibold text-lg hidden flex items-center justify-center gap-2 opacity-0">
+                <i data-feather="map-pin" class="w-5 h-5"></i>
+                লোকেশন দেখুন (Google Maps)
+            </button>
+
+            <!-- Footer -->
+            <div class="text-center mt-10 space-y-1 opacity-70">
+                <p class="text-xs">Developed with ❤️ by Hridoy</p>
+                <p class="text-xs">Version: <span id="versionDisplay">5.0.1</span></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        feather.replace();
+
+        const searchBox = document.getElementById('searchBox');
+        const searchBtn = document.getElementById('searchBtn');
+        const resultText = document.getElementById('resultText');
+        const progressBar = document.getElementById('progressBar');
+        const copyBtn = document.getElementById('copyBtn');
+        const shareBtn = document.getElementById('shareBtn');
+        const openMapBtn = document.getElementById('openMapBtn');
+        const checkUpdateBtn = document.getElementById('checkUpdateBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const backBtn = document.getElementById('backBtn');
+        const actionButtons = document.getElementById('actionButtons');
+
+        let finalResult = "";
+        let currentLat = 0.0;
+        let currentLong = 0.0;
+
+        const jsonUrl = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec";
+        const versionCheckUrl = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/version.json";
+        const currentVersion = "5.0.1";
+        document.getElementById('versionDisplay').innerText = currentVersion;
+
+        // Back & Logout
+        backBtn.addEventListener('click', () => window.location.href = 'dashboard.html');
+        logoutBtn.addEventListener('click', () => { localStorage.clear(); window.location.href = 'index.html'; });
+
+        // Search Function
+        searchBtn.addEventListener('click', async () => {
+            const query = searchBox.value.trim();
+            if (!query) return showResult("Site ID দিন", "text-red-300");
+
+            showProgress(true);
+            clearResult();
+            finalResult = "";
+            currentLat = currentLong = 0.0;
+
+            try {
+                const response = await fetch(`${jsonUrl}?site=${encodeURIComponent(query)}`);
+                const data = await response.json(); // FIXED: await added
+
+                if (!data || Object.keys(data).length === 0) {
+                    return showResult("কোনো তথ্য পাওয়া যায়নি।", "text-yellow-300");
+                }
+
+                let resultBuilder = "";
+                for (const sheetName in data) {
+                    const sheetArray = data[sheetName];
+                    sheetArray.forEach(rowObj => {
+                        for (const key in rowObj) {
+                            const value = String(rowObj[key]).trim();
+                            if (value) resultBuilder += `${key} = ${value}\n`;
+                        }
+                        if (rowObj.Latitude && rowObj.Longitude) {
+                            currentLat = parseFloat(rowObj.Latitude);
+                            currentLong = parseFloat(rowObj.Longitude);
+                        }
+                    });
+                }
+
+                finalResult = resultBuilder.trim();
+                showResult(finalResult, "text-white");
+
+                // Show Map Button if coordinates exist
+                if (currentLat && currentLong) {
+                    openMapBtn.classList.remove('hidden');
+                    setTimeout(() => openMapBtn.classList.add('animate-fadeIn'), 100);
+                }
+
+                // Save History
+                let history = JSON.parse(localStorage.getItem("search_history") || "[]");
+                if (!history.includes(query)) {
+                    history.push(query);
+                    localStorage.setItem("search_history", JSON.stringify(history));
+                }
+
+            } catch (err) {
+                console.error(err);
+                showResult("ডেটা লোড করতে সমস্যা হয়েছে", "text-red-300");
+            } finally {
+                showProgress(false);
+            }
+        });
+
+        // Helper Functions
+        function showResult(text, colorClass = "text-white") {
+            resultText.innerHTML = `<pre class="whitespace-pre-wrap font-medium ${colorClass}">${text}</pre>`;
+            resultText.classList.remove('opacity-0');
+            resultText.classList.add('animate-fadeIn');
+            actionButtons.classList.remove('opacity-0');
+            actionButtons.classList.add('animate-fadeIn');
+        }
+
+        function clearResult() {
+            resultText.classList.add('opacity-0');
+            actionButtons.classList.add('opacity-0');
+            openMapBtn.classList.add('hidden');
+            openMapBtn.classList.remove('animate-fadeIn');
+        }
+
+        function showProgress(show) {
+            progressBar.classList.toggle('hidden', !show);
+        }
+
+        // Copy
+        copyBtn.addEventListener('click', () => {
+            if (!finalResult) return showResult("আগে সার্চ করুন", "text-red-300");
+            const temp = document.createElement('textarea');
+            temp.value = finalResult;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showResult("সব ডেটা কপি হয়েছে!", "text-green-300");
+        });
+
+        // Share
+        shareBtn.addEventListener('click', () => {
+            if (!finalResult) return showResult("আগে সার্চ করুন", "text-red-300");
+            if (navigator.share) {
+                navigator.share({ text: finalResult });
+            } else {
+                showResult("কপি করে শেয়ার করুন", "text-yellow-300");
+            }
+        });
+
+        // Open Map
+        openMapBtn.addEventListener('click', () => {
+            if (currentLat && currentLong) {
+                const url = `https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLong}`;
+                window.open(url, "_blank");
+            }
+        });
+
+        // Update Check
+        async function checkForUpdate() {
+            try {
+                const res = await fetch(versionCheckUrl);
+                const data = await res.json();
+                if (currentVersion !== data.version) {
+                    checkUpdateBtn.classList.remove('hidden');
+                    checkUpdateBtn.onclick = () => window.open(data.apkUrl, "_blank");
+                }
+            } catch (err) {
+                console.log("Update check failed");
+            }
+        }
+        checkForUpdate();
+
+        // Floating Label
+        const label = searchBox.nextElementSibling.nextElementSibling;
+        searchBox.addEventListener('focus', () => {
+            label.classList.add('!top-3', '!text-xs', '!text-purple-300');
+        });
+        searchBox.addEventListener('blur', () => {
+            if (!searchBox.value) {
+                label.classList.remove('!top-3', '!text-xs', '!text-purple-300');
+            }
+        });
+    </script>
+</body>
+</html>
