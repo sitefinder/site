@@ -1,309 +1,270 @@
 <!DOCTYPE html>
 <html lang="bn" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPIDATA</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/feather-icons"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GPIDATA</title>
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .glass {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        .input-focus:focus {
-            outline: none;
-            ring: 2px solid #a78bfa;
-            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
-        }
-        .scrollbar::-webkit-scrollbar { width: 8px; }
-        .scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
-        .scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.4); border-radius: 10px; }
-        .scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.6); }
+  <!-- Preload Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+  <!-- Tailwind CDN (সঠিকভাবে কাজ করবে) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Poppins', 'sans-serif'] },
+          animation: { fadeIn: 'fadeIn 0.4s ease-out forwards' },
+          keyframes: { fadeIn: { from: { opacity: 0, transform: 'translateY(10px)' }, to: { opacity: 1, transform: 'translateY(0)' } } }
         }
-        .animate-fadeIn { animation: fadeIn 0.4s ease-out forwards; }
+      }
+    };
+  </script>
 
-        .btn-gradient {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-        }
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-        }
-        .btn-blue {
-            background: linear-gradient(45deg, #4facfe, #00f2fe);
-            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
-        }
-        .btn-blue:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
-        }
-        .btn-green {
-            background: linear-gradient(45deg, #56ab2f, #a8e6cf);
-            box-shadow: 0 4px 15px rgba(86, 171, 47, 0.3);
-        }
-        .btn-green:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(86, 171, 47, 0.4);
-        }
-    </style>
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    .input-focus:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.3);
+      ring: 2px solid #a78bfa;
+    }
+    .scrollbar::-webkit-scrollbar { width: 8px; }
+    .scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    .scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.4); border-radius: 10px; }
+    .scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.6); }
+
+    .btn-gradient {
+      background: linear-gradient(45deg, #ff6b6b, #feca57);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    }
+    .btn-gradient:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    }
+    .btn-blue {
+      background: linear-gradient(45deg, #4facfe, #00f2fe);
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+    }
+    .btn-blue:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+    }
+    .btn-green {
+      background: linear-gradient(45deg, #56ab2f, #a8e6cf);
+      box-shadow: 0 4px 15px rgba(86, 171, 47, 0.3);
+    }
+    .btn-green:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(86, 171, 47, 0.4);
+    }
+  </style>
 </head>
 <body class="flex flex-col min-h-screen text-white">
 
-    <!-- Toolbar -->
-    <header class="glass py-4 px-5 shadow-lg">
-        <div class="max-w-4xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <button id="backBtn" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all duration-200">
-                    <i data-feather="arrow-left" class="w-5 h-5"></i>
-                </button>
-                <h1 class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">
-                    GPIDATA
-                </h1>
-            </div>
-            <button id="logoutBtn" class="btn-gradient text-white px-5 py-2 rounded-full font-medium flex items-center gap-2">
-                <i data-feather="log-out" class="w-4 h-4"></i>
-                Logout
-            </button>
-        </div>
-    </header>
+  <!-- Header -->
+  <header class="glass py-4 px-5 shadow-lg">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <button id="backBtn" class="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">GPIDATA</h1>
+      </div>
+      <button id="logoutBtn" class="btn-gradient px-5 py-2 rounded-full font-medium flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Logout
+      </button>
+    </div>
+  </header>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-5 max-w-4xl mx-auto w-full">
-        <div class="space-y-5">
+  <!-- Main -->
+  <main class="flex-1 p-5 max-w-4xl mx-auto w-full space-y-5">
+    <!-- Update Button -->
+    <button id="checkUpdateBtn" class="hidden w-full btn-gradient py-4 rounded-2xl font-semibold text-lg animate-pulse flex items-center justify-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      অ্যাপ আপডেট করুন
+    </button>
 
-            <!-- Update Button -->
-            <button id="checkUpdateBtn" class="w-full btn-gradient text-white py-4 rounded-2xl font-semibold text-lg hidden animate-pulse flex items-center justify-center gap-2">
-                <i data-feather="download" class="w-5 h-5"></i>
-                অ্যাপ আপডেট করুন
-            </button>
+    <!-- Search Box -->
+    <div class="relative group">
+      <input type="text" id="searchBox" placeholder=" " 
+             class="w-full h-14 pl-12 pr-5 rounded-2xl glass text-white placeholder-white/70 input-focus transition-all duration-300">
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <label class="absolute left-12 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none transition-all duration-300 
+                    group-focus-within:top-3 group-focus-within:text-xs group-focus-within:text-purple-300">
+        Site ID লিখুন
+      </label>
+    </div>
 
-            <!-- Search Box -->
-            <div class="relative group">
-                <input type="text" id="searchBox" placeholder=" " 
-                       class="w-full h-14 px-5 pl-12 rounded-2xl glass text-white placeholder-white/70 input-focus transition-all duration-300">
-                <i data-feather="search" class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/70 pointer-events-none"></i>
-                <label class="absolute left-12 top-1/2 transform -translate-y-1/2 text-white/70 pointer-events-none transition-all duration-300 
-                              group-focus-within:top-3 group-focus-within:text-xs group-focus-within:text-purple-300">
-                    Site ID লিখুন
-                </label>
-            </div>
+    <!-- Search Button -->
+    <button id="searchBtn" class="w-full h-14 btn-blue text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      Search
+    </button>
 
-            <!-- Search Button -->
-            <button id="searchBtn" class="w-full h-14 btn-blue text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 transition-all duration-300">
-                <i data-feather="search" class="w-5 h-5"></i>
-                Search
-            </button>
+    <!-- Progress -->
+    <div id="progressBar" class="w-12 h-12 mx-auto border-4 border-white/30 border-t-purple-400 rounded-full animate-spin hidden"></div>
 
-            <!-- Progress Spinner -->
-            <div id="progressBar" class="w-12 h-12 mx-auto border-4 border-white/30 border-t-purple-400 rounded-full animate-spin hidden"></div>
+    <!-- Result -->
+    <div id="resultText" class="glass p-5 rounded-2xl min-h-[120px] text-sm text-white/90 leading-relaxed scrollbar overflow-y-auto max-h-80 opacity-0"></div>
 
-            <!-- Result Card -->
-            <div id="resultText" class="glass p-5 rounded-2xl min-h-[120px] text-sm text-white/90 leading-relaxed scrollbar scrollable overflow-y-auto max-h-80 opacity-0"></div>
+    <!-- Action Buttons -->
+    <div id="actionButtons" class="flex gap-3 opacity-0">
+      <button id="copyBtn" class="flex-1 btn-gradient py-3 rounded-2xl font-medium flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        All Text Copy
+      </button>
+      <button id="shareBtn" class="flex-1 btn-blue py-3 rounded-2xl font-medium flex items-center justify-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m9.255 1.32a3 3 0 11-3.438-4.957 3 3 0 013.438 4.957m-9.02 4.47a3 3 0 11-4.47-4.47m4.47 4.47a3 3 0 114.47-4.47"/></svg>
+        শেয়ার করুন
+      </button>
+    </div>
 
-            <!-- Action Buttons -->
-            <div class="flex gap-3 mt-4 opacity-0" id="actionButtons">
-                <button id="copyBtn" class="flex-1 btn-gradient text-white py-3 rounded-2xl font-medium flex items-center justify-center gap-2">
-                    <i data-feather="copy" class="w-5 h-5"></i>
-                    All Text Copy
-                </button>
-                <button id="shareBtn" class="flex-1 btn-blue text-white py-3 rounded-2xl font-medium flex items-center justify-center gap-2">
-                    <i data-feather="share-2" class="w-5 h-5"></i>
-                    শেয়ার করুন
-                </button>
-            </div>
+    <!-- Map Button -->
+    <button id="openMapBtn" class="hidden w-full btn-green py-4 mt-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-2 opacity-0">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      লোকেশন দেখুন (Google Maps)
+    </button>
 
-            <!-- Open Map Button -->
-            <button id="openMapBtn" class="w-full btn-green text-white py-4 mt-4 rounded-2xl font-semibold text-lg hidden flex items-center justify-center gap-2 opacity-0">
-                <i data-feather="map-pin" class="w-5 h-5"></i>
-                লোকেশন দেখুন (Google Maps)
-            </button>
+    <!-- Footer -->
+    <div class="text-center mt-10 text-xs opacity-70 space-y-1">
+      <p>Developed with Love by Hridoy</p>
+      <p>Version: <span id="versionDisplay">5.0.1</span></p>
+    </div>
+  </main>
 
-            <!-- Footer -->
-            <div class="text-center mt-10 space-y-1 opacity-70">
-                <p class="text-xs">Developed with ❤️ by Hridoy</p>
-                <p class="text-xs">Version: <span id="versionDisplay">5.0.1</span></p>
-            </div>
-        </div>
-    </main>
+  <!-- JS -->
+  <script>
+    const $ = s => document.querySelector(s);
+    const els = {
+      searchBox: $('#searchBox'),
+      searchBtn: $('#searchBtn'),
+      resultText: $('#resultText'),
+      progress: $('#progressBar'),
+      copyBtn: $('#copyBtn'),
+      shareBtn: $('#shareBtn'),
+      mapBtn: $('#openMapBtn'),
+      updateBtn: $('#checkUpdateBtn'),
+      backBtn: $('#backBtn'),
+      logoutBtn: $('#logoutBtn'),
+      actionBtns: $('#actionButtons'),
+      label: $('#searchBox').nextElementSibling.nextElementSibling
+    };
 
-    <script>
-        feather.replace();
+    let result = "", lat = 0, lng = 0;
+    const JSON_URL = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec";
+    const VERSION_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/version.json";
+    const VERSION = "5.0.1";
+    $('#versionDisplay').textContent = VERSION;
 
-        const searchBox = document.getElementById('searchBox');
-        const searchBtn = document.getElementById('searchBtn');
-        const resultText = document.getElementById('resultText');
-        const progressBar = document.getElementById('progressBar');
-        const copyBtn = document.getElementById('copyBtn');
-        const shareBtn = document.getElementById('shareBtn');
-        const openMapBtn = document.getElementById('openMapBtn');
-        const checkUpdateBtn = document.getElementById('checkUpdateBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const backBtn = document.getElementById('backBtn');
-        const actionButtons = document.getElementById('actionButtons');
+    // Navigation
+    els.backBtn.onclick = () => location.href = 'dashboard.html';
+    els.logoutBtn.onclick = () => { localStorage.clear(); location.href = 'index.html'; };
 
-        let finalResult = "";
-        let currentLat = 0.0;
-        let currentLong = 0.0;
+    // Search
+    els.searchBtn.onclick = async () => {
+      const q = els.searchBox.value.trim();
+      if (!q) return show("Site ID দিন", "text-red-300");
 
-        const jsonUrl = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec";
-        const versionCheckUrl = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/version.json";
-        const currentVersion = "5.0.1";
-        document.getElementById('versionDisplay').innerText = currentVersion;
+      showProgress(true); clear();
+      try {
+        const res = await fetch(`${JSON_URL}?site=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        if (!data || !Object.keys(data).length) return show("কোনো তথ্য পাওয়া যায়নি।", "text-yellow-300");
 
-        // Back & Logout
-        backBtn.addEventListener('click', () => window.location.href = 'dashboard.html');
-        logoutBtn.addEventListener('click', () => { localStorage.clear(); window.location.href = 'index.html'; });
-
-        // Search Function
-        searchBtn.addEventListener('click', async () => {
-            const query = searchBox.value.trim();
-            if (!query) return showResult("Site ID দিন", "text-red-300");
-
-            showProgress(true);
-            clearResult();
-            finalResult = "";
-            currentLat = currentLong = 0.0;
-
-            try {
-                const response = await fetch(`${jsonUrl}?site=${encodeURIComponent(query)}`);
-                const data = await response.json(); // FIXED: await added
-
-                if (!data || Object.keys(data).length === 0) {
-                    return showResult("কোনো তথ্য পাওয়া যায়নি।", "text-yellow-300");
-                }
-
-                let resultBuilder = "";
-                for (const sheetName in data) {
-                    const sheetArray = data[sheetName];
-                    sheetArray.forEach(rowObj => {
-                        for (const key in rowObj) {
-                            const value = String(rowObj[key]).trim();
-                            if (value) resultBuilder += `${key} = ${value}\n`;
-                        }
-                        if (rowObj.Latitude && rowObj.Longitude) {
-                            currentLat = parseFloat(rowObj.Latitude);
-                            currentLong = parseFloat(rowObj.Longitude);
-                        }
-                    });
-                }
-
-                finalResult = resultBuilder.trim();
-                showResult(finalResult, "text-white");
-
-                // Show Map Button if coordinates exist
-                if (currentLat && currentLong) {
-                    openMapBtn.classList.remove('hidden');
-                    setTimeout(() => openMapBtn.classList.add('animate-fadeIn'), 100);
-                }
-
-                // Save History
-                let history = JSON.parse(localStorage.getItem("search_history") || "[]");
-                if (!history.includes(query)) {
-                    history.push(query);
-                    localStorage.setItem("search_history", JSON.stringify(history));
-                }
-
-            } catch (err) {
-                console.error(err);
-                showResult("ডেটা লোড করতে সমস্যা হয়েছে", "text-red-300");
-            } finally {
-                showProgress(false);
+        let out = "";
+        for (const sheet in data) {
+          data[sheet].forEach(row => {
+            for (const k in row) {
+              const v = String(row[k]).trim();
+              if (v) out += `${k} = ${v}\n`;
+              if (row.Latitude && row.Longitude) {
+                lat = parseFloat(row.Latitude);
+                lng = parseFloat(row.Longitude);
+              }
             }
-        });
-
-        // Helper Functions
-        function showResult(text, colorClass = "text-white") {
-            resultText.innerHTML = `<pre class="whitespace-pre-wrap font-medium ${colorClass}">${text}</pre>`;
-            resultText.classList.remove('opacity-0');
-            resultText.classList.add('animate-fadeIn');
-            actionButtons.classList.remove('opacity-0');
-            actionButtons.classList.add('animate-fadeIn');
+          });
         }
+        result = out.trim();
+        show(result);
+        if (lat && lng) showMapBtn();
 
-        function clearResult() {
-            resultText.classList.add('opacity-0');
-            actionButtons.classList.add('opacity-0');
-            openMapBtn.classList.add('hidden');
-            openMapBtn.classList.remove('animate-fadeIn');
+        // History
+        const hist = JSON.parse(localStorage.getItem("search_history") || "[]");
+        if (!hist.includes(q)) { hist.push(q); localStorage.setItem("search_history", JSON.stringify(hist)); }
+      } catch (e) {
+        show("ডেটা লোড করতে সমস্যা হয়েছে", "text-red-300");
+      } finally {
+        showProgress(false);
+      }
+    };
+
+    const show = (text, cls = "text-white") => {
+      els.resultText.innerHTML = `<pre class="whitespace-pre-wrap font-medium ${cls}">${text}</pre>`;
+      els.resultText.classList.remove('opacity-0');
+      els.resultText.classList.add('animate-fadeIn');
+      els.actionBtns.classList.remove('opacity-0');
+      els.actionBtns.classList.add('animate-fadeIn');
+    };
+    const clear = () => {
+      els.resultText.classList.add('opacity-0');
+      els.actionBtns.classList.add('opacity-0');
+      els.mapBtn.classList.add('hidden', 'opacity-0');
+    };
+    const showProgress = (s) => els.progress.classList.toggle('hidden', !s);
+    const showMapBtn = () => {
+      els.mapBtn.classList.remove('hidden');
+      setTimeout(() => els.mapBtn.classList.add('animate-fadeIn'), 50);
+    };
+
+    // Copy
+    els.copyBtn.onclick = () => {
+      if (!result) return show("আগে সার্চ করুন", "text-red-300");
+      navigator.clipboard.writeText(result).then(() => show("কপি হয়েছে!", "text-green-300"));
+    };
+
+    // Share
+    els.shareBtn.onclick = () => {
+      if (!result) return show("আগে সার্চ করুন", "text-red-300");
+      if (navigator.share) navigator.share({ text: result });
+      else show("কপি করে শেয়ার করুন", "text-yellow-300");
+    };
+
+    // Map
+    els.mapBtn.onclick = () => {
+      if (lat && lng) open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, "_blank");
+    };
+
+    // Update Check
+    (async () => {
+      try {
+        const res = await fetch(VERSION_URL);
+        const { version, apkUrl } = await res.json();
+        if (version !== VERSION) {
+          els.updateBtn.classList.remove('hidden');
+          els.updateBtn.onclick = () => open(apkUrl, "_blank");
         }
+      } catch {}
+    })();
 
-        function showProgress(show) {
-            progressBar.classList.toggle('hidden', !show);
-        }
-
-        // Copy
-        copyBtn.addEventListener('click', () => {
-            if (!finalResult) return showResult("আগে সার্চ করুন", "text-red-300");
-            const temp = document.createElement('textarea');
-            temp.value = finalResult;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
-            showResult("সব ডেটা কপি হয়েছে!", "text-green-300");
-        });
-
-        // Share
-        shareBtn.addEventListener('click', () => {
-            if (!finalResult) return showResult("আগে সার্চ করুন", "text-red-300");
-            if (navigator.share) {
-                navigator.share({ text: finalResult });
-            } else {
-                showResult("কপি করে শেয়ার করুন", "text-yellow-300");
-            }
-        });
-
-        // Open Map
-        openMapBtn.addEventListener('click', () => {
-            if (currentLat && currentLong) {
-                const url = `https://www.google.com/maps/search/?api=1&query=${currentLat},${currentLong}`;
-                window.open(url, "_blank");
-            }
-        });
-
-        // Update Check
-        async function checkForUpdate() {
-            try {
-                const res = await fetch(versionCheckUrl);
-                const data = await res.json();
-                if (currentVersion !== data.version) {
-                    checkUpdateBtn.classList.remove('hidden');
-                    checkUpdateBtn.onclick = () => window.open(data.apkUrl, "_blank");
-                }
-            } catch (err) {
-                console.log("Update check failed");
-            }
-        }
-        checkForUpdate();
-
-        // Floating Label
-        const label = searchBox.nextElementSibling.nextElementSibling;
-        searchBox.addEventListener('focus', () => {
-            label.classList.add('!top-3', '!text-xs', '!text-purple-300');
-        });
-        searchBox.addEventListener('blur', () => {
-            if (!searchBox.value) {
-                label.classList.remove('!top-3', '!text-xs', '!text-purple-300');
-            }
-        });
-    </script>
+    // Label Animation
+    els.searchBox.onfocus = () => els.label.classList.add('!top-3', '!text-xs', '!text-purple-300');
+    els.searchBox.onblur = () => { if (!els.searchBox.value) els.label.classList.remove('!top-3', '!text-xs', '!text-purple-300'); };
+  </script>
 </body>
 </html>
