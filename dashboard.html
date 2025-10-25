@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SITE FINDER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --neon-blue: #00f0ff;
+      --neon-pink: #ff00ff;
+      --neon-purple: #9d00ff;
+      --bg: #0a0a0a;
+      --card-bg: rgba(20, 20, 40, 0.4);
+      --text: #e0e0ff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .cyber-grid {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        linear-gradient(90deg, rgba(0,240,255,0.05) 1px, transparent 1px),
+        linear-gradient(rgba(0,240,255,0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: gridMove 20s linear infinite;
+    }
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* 3D Flip Card */
+    .flip-card {
+      width: 100%;
+      height: 100%;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+      border: 1px solid var(--neon-blue);
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, rgba(157,0,255,0.3), rgba(255,0,255,0.2));
+      border-color: var(--neon-pink);
+    }
+
+    /* Neon Text */
+    .neon-text {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 20px rgba(0,240,255,0.8);
+    }
+    .neon-glow {
+      box-shadow: 0 0 20px var(--neon-blue), 0 0 40px var(--neon-purple);
+      transition: all 0.4s ease;
+    }
+    .neon-glow:hover {
+      box-shadow: 0 0 40px var(--neon-blue), 0 0 80px var(--neon-purple);
+    }
+
+    /* Magnetic Cursor */
+    .card-container {
+      position: relative;
+    }
+    .card-container::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(0,240,255,0.2) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .card-container:hover::before {
+      opacity: 1;
+    }
+
+    /* Theme Toggle */
+    .theme-btn {
+      width: 2.5rem; height: 2.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    .theme-btn:hover { transform: scale(1.2); border-color: white; }
+
+    /* Epic Logout Button */
+    .logout-btn {
+      background: linear-gradient(135deg, #ff00ff, #00f0ff);
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 3rem auto 0;
+      box-shadow: 0 0 30px rgba(255,0,255,0.6);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+    .logout-btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s;
+    }
+    .logout-btn:hover::before {
+      left: 100%;
+    }
+    .logout-btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 0 50px rgba(255,0,255,0.9), 0 0 100px rgba(0,240,255,0.6);
+    }
+
+    .header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cyber-grid"></div>
+
+  <!-- Theme Toggle -->
+  <div class="fixed top-6 right-6 z-50">
+    <button onclick="toggleTheme()" class="text-white text-3xl bg-white/10 backdrop-blur p-2 rounded-full shadow-lg neon-glow">
+      <span class="material-icons">color_lens</span>
+    </button>
+    <div id="themePanel" class="hidden mt-3 flex gap-2 bg-black/50 backdrop-blur p-3 rounded-2xl border border-cyan-500/50">
+      <div class="theme-btn bg-gradient-to-r from-cyan-400 to-blue-600 active" data-theme="cyber" onclick="setTheme(this)"></div>
+      <div class="theme-btn bg-gradient-to-r from-pink-500 to-purple-600" data-theme="pink" onclick="setTheme(this)"></div>
+      <div class="theme-btn bg-gradient-to-r from-green-400 to-teal-600" data-theme="matrix" onclick="setTheme(this)"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-full max-w-6xl text-center relative z-10">
+
+    <!-- Header -->
+    <header class="mb-12">
+      <h1 class="neon-text">SITE FINDER</h1>
+      <p class="text-cyan-300 text-sm tracking-widest">ACCESS GRANTED</p>
+    </header>
+
+    <!-- 3D Flip Cards with Links -->
+    <div class="grid">
+
+      <!-- Site Search -->
+      <a href="search.html" class="card-container block" onmousemove="followCursor(event)">
+        <div class="flip-card h-64">
+          <div class="flip-card-inner">
+            <div class="flip-card-front neon-glow">
+              <div class="text-5xl text-cyan-400 mb-3">Site search</div>
+              <h3 class="text-xl font-bold text-cyan-400"></h3>
+            </div>
+            <div class="flip-card-back">
+              <p class="text-pink-300 text-sm">Scan the web matrix<br>Find any domain</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Calculator -->
+      <a href="calculator.html" class="card-container block" onmousemove="followCursor(event)">
+        <div class="flip-card h-64">
+          <div class="flip-card-inner">
+            <div class="flip-card-front neon-glow">
+              <div class="text-4xl text-purple-400 mb-3">Calculator</div>
+              <h3 class="text-lg font-bold text-purple-400"></h3>
+            </div>
+            <div class="flip-card-back">
+              <p class="text-pink-100 text-sm">Math Engine v2.0<br>Time + Logic</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Instruction -->
+      <a href="instruction.html" class="card-container block" onmousemove="followCursor(event)">
+        <div class="flip-card h-64">
+          <div class="flip-card-inner">
+            <div class="flip-card-front neon-glow">
+              <div class="text-3xl text-green-400 mb-3">Instruction</div>
+              <h3 class="text-xl font-bold text-green-300"></h3>
+            </div>
+            <div class="flip-card-back">
+              <p class="text-pink-300 text-sm">System Manual<br>Read Before Hack</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Developer -->
+      <a href="developer.html" class="card-container block" onmousemove="followCursor(event)">
+        <div class="flip-card h-64">
+          <div class="flip-card-inner">
+            <div class="flip-card-front neon-glow">
+              <div class="text-6xl text-orange-400 mb-3">code</div>
+              <h3 class="text-xl font-bold text-orange-300">Developer</h3>
+            </div>
+            <div class="flip-card-back">
+              <p class="text-pink-300 text-sm">Creator:Hridoy Mahmudul <br>Version: 5.0.0</p>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Epic Logout Button -->
+    <button onclick="confirmLogout()" class="logout-btn neon-glow">
+      <span class="material-icons text-xl">power_settings_new</span>
+      <span>TERMINATE SESSION</span>
+    </button>
+
+  </div>
+
+  <script>
+    // Cursor Follow Effect
+    function followCursor(e) {
+      const container = e.currentTarget;
+      const rect = container.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      container.style.setProperty('--cursor-x', `${x}px`);
+      container.style.setProperty('--cursor-y', `${y}px`);
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      document.getElementById('themePanel').classList.toggle('hidden');
+    }
+
+    // Set Theme
+    function setTheme(btn) {
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // Logout with Hack Effect
+    function confirmLogout() {
+      if (confirm("TERMINATE CONNECTION?")) {
+        document.body.innerHTML = `
+          <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;color:#0f0;font-family:monospace;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+            <h1 style="font-size:4rem;animation:glitch 1s infinite;">ACCESS DENIED</h1>
+            <p style="animation:typing 3s steps(30) infinite;">DISCONNECTING...</p>
+          </div>`;
+        setTimeout(() => window.location.href = "index.html", 3000);
+      }
+    }
+
+    // Glitch Animation
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes glitch {
+        0%, 100% { text-shadow: 0.05em 0 0 #00f, -0.05em 0 0 #f00; }
+        14% { text-shadow: 0.05em 0 0 #00f, -0.05em 0 0 #f00; }
+        15% { text-shadow: -0.05em 0 0 #00f, 0.05em 0 0 #f00; }
+        49% { text-shadow: -0.05em 0 0 #00f, 0.05em 0 0 #f00; }
+        50% { text-shadow: 0.05em 0 0 #f00, -0.05em 0 0 #00f; }
+        99% { text-shadow: 0.05em 0 0 #f00, -0.05em 0 0 #00f; }
+      }
+      @keyframes typing {
+        from { width: 0 }
+        to { width: 100% }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+
+</body>
+</html>
