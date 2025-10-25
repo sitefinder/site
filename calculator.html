@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Premium Dual Calculator</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --danger: #ff6b6b;
+      --warning: #ff9f1c;
+      --success: #06d6a0;
+      --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --card-bg: rgba(255, 255, 255, 0.18);
+      --glass: rgba(255, 255, 255, 0.1);
+      --border: rgba(255, 255, 255, 0.2);
+      --text: #ffffff;
+      --shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      --btn-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 24px 20px 16px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff, #a0e7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 16px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      border-radius: 10px;
+      margin: 4px;
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .tab::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 3px;
+      background: white;
+      transition: 0.3s;
+      transform: translateX(-50%);
+    }
+
+    .tab.active::after {
+      width: 60%;
+    }
+
+    .calculator {
+      padding: 20px;
+      display: none;
+    }
+
+    .calculator.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* === Premium Normal Calculator === */
+    .calc-container {
+      background: var(--glass);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      box-shadow: var(--btn-shadow);
+    }
+
+    .calc-history {
+      font-size: 0.9rem;
+      text-align: right;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 4px;
+      min-height: 20px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .calc-history.show {
+      opacity: 1;
+    }
+
+    .calc-display {
+      width: 100%;
+      padding: 16px;
+      font-size: 2rem;
+      font-weight: 600;
+      text-align: right;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      color: white;
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+      transition: all 0.2s;
+    }
+
+    .calc-display:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+    }
+
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .btn {
+      padding: 18px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 16px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--btn-shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .btn:hover::before {
+      opacity: 1;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .btn.number {
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn.operator {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+    }
+
+    .btn.equals {
+      background: linear-gradient(135deg, var(--danger), #ff4757);
+      grid-column: span 2;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .btn.clear {
+      background: linear-gradient(135deg, var(--warning), #ffb84d);
+      grid-column: span 2;
+      box-shadow: 0 4px 15px rgba(255, 159, 28, 0.4);
+    }
+
+    /* === Time Calculator (Multi-Row) === */
+    .time-rows {
+      margin-bottom: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .time-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: end;
+    }
+
+    .time-group {
+      background: var(--glass);
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .time-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .time-group input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .time-group input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .remove-row {
+      background: linear-gradient(135deg, #e63946, #d00000);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+    }
+
+    .remove-row:hover {
+      transform: scale(1.05);
+    }
+
+    .add-row-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--glass);
+      color: white;
+      border: 2px dashed rgba(255, 255, 255, 0.4);
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-bottom: 16px;
+      backdrop-filter: blur(8px);
+    }
+
+    .add-row-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: white;
+      transform: translateY(-2px);
+    }
+
+    .time-result {
+      padding: 18px;
+      background: linear-gradient(135deg, rgba(67, 97, 238, 0.4), rgba(72, 149, 239, 0.3));
+      border-radius: 16px;
+      text-align: center;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 20px rgba(67, 97, 238, 0.3);
+    }
+
+    @media (max-width: 480px) {
+      .container { margin: 10px; border-radius: 18px; }
+      .calc-display { font-size: 1.7rem; }
+      .btn { padding: 16px; font-size: 1.2rem; }
+      .time-row { grid-template-columns: 1fr 1fr; }
+      .remove-row { grid-column: 1 / -1; margin-top: 8px; width: 100%; height: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Premium Calculator</h1>
+      <p>Standard + Time Addition</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="normal">Standard</div>
+      <div class="tab" data-tab="time">Time Add</div>
+    </div>
+
+    <!-- Premium Standard Calculator -->
+    <div id="normal" class="calculator active">
+      <div class="calc-container">
+        <div class="calc-history" id="history"></div>
+        <input type="text" class="calc-display" id="display" readonly placeholder="0" />
+      </div>
+
+      <div class="calc-buttons">
+        <button class="btn clear" onclick="clearDisplay()">C</button>
+        <button class="btn operator" onclick="appendToDisplay('/')">÷</button>
+        <button class="btn operator" onclick="appendToDisplay('*')">×</button>
+        <button class="btn operator" onclick="backspace()">Backspace</button>
+
+        <button class="btn number" onclick="appendToDisplay('7')">7</button>
+        <button class="btn number" onclick="appendToDisplay('8')">8</button>
+        <button class="btn number" onclick="appendToDisplay('9')">9</button>
+        <button class="btn operator" onclick="appendToDisplay('-')">−</button>
+
+        <button class="btn number" onclick="appendToDisplay('4')">4</button>
+        <button class="btn number" onclick="appendToDisplay('5')">5</button>
+        <button class="btn number" onclick="appendToDisplay('6')">6</button>
+        <button class="btn operator" onclick="appendToDisplay('+')">+</button>
+
+        <button class="btn number" onclick="appendToDisplay('1')">1</button>
+        <button class="btn number" onclick="appendToDisplay('2')">2</button>
+        <button class="btn number" onclick="appendToDisplay('3')">3</button>
+        <button class="btn equals" onclick="calculate()">=</button>
+
+        <button class="btn number" style="grid-column: span 2;" onclick="appendToDisplay('0')">0</button>
+        <button class="btn number" onclick="appendToDisplay('.')">.</button>
+      </div>
+    </div>
+
+    <!-- Time Calculator (Multi-Row) -->
+    <div id="time" class="calculator">
+      <div class="time-rows" id="timeRows">
+        <div class="time-row">
+          <div class="time-group">
+            <label>Hours</label>
+            <input type="number" class="hour-input" placeholder="0" min="0" />
+          </div>
+          <div class="time-group">
+            <label>Minutes</label>
+            <input type="number" class="min-input" placeholder="0" min="0" max="59" />
+          </div>
+          <button class="remove-row" onclick="removeRow(this)" style="visibility:hidden;">×</button>
+        </div>
+      </div>
+
+      <button class="add-row-btn" onclick="addRow()">+ Add Row</button>
+
+      <div class="time-result" id="timeResult">
+        Total: <strong>0 hours 0 minutes</strong>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tab Switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.calculator').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // === Premium Standard Calculator ===
+    let display = document.getElementById('display');
+    let history = document.getElementById('history');
+    let currentInput = '';
+    let lastResult = '';
+
+    function appendToDisplay(value) {
+      if (display.value === '0' && value !== '.') display.value = '';
+      if (['+', '-', '×', '÷'].includes(value) && display.value === '') return;
+      display.value += value;
+      currentInput = display.value;
+    }
+
+    function clearDisplay() {
+      display.value = '';
+      currentInput = '';
+      history.classList.remove('show');
+    }
+
+    function backspace() {
+      display.value = display.value.slice(0, -1);
+      currentInput = display.value;
+    }
+
+    function calculate() {
+      if (!currentInput) return;
+      try {
+        let expression = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
+        let result = eval(expression);
+        lastResult = result;
+        history.textContent = currentInput + ' =';
+        history.classList.add('show');
+        display.value = result;
+        currentInput = result.toString();
+      } catch {
+        display.value = 'Error';
+        setTimeout(() => { if (display.value === 'Error') display.value = ''; }, 1500);
+      }
+    }
+
+    // Keyboard support
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('normal').classList.contains('active')) return;
+      if (e.key >= '0' && e.key <= '9') appendToDisplay(e.key);
+      if (e.key === '.') appendToDisplay('.');
+      if (e.key === '+') appendToDisplay('+');
+      if (e.key === '-') appendToDisplay('−');
+      if (e.key === '*') appendToDisplay('×');
+      if (e.key === '/') appendToDisplay('÷');
+      if (e.key === 'Enter') calculate();
+      if (e.key === 'Escape') clearDisplay();
+      if (e.key === 'Backspace') backspace();
+    });
+
+    // === Time Calculator ===
+    const timeRowsContainer = document.getElementById('timeRows');
+    const timeResult = document.getElementById('timeResult');
+
+    function addRow() {
+      const row = document.createElement('div');
+      row.className = 'time-row';
+      row.innerHTML = `
+        <div class="time-group">
+          <label>Hours</label>
+          <input type="number" class="hour-input" placeholder="0" min="0" />
+        </div>
+        <div class="time-group">
+          <label>Minutes</label>
+          <input type="number" class="min-input" placeholder="0" min="0" max="59" />
+        </div>
+        <button class="remove-row" onclick="removeRow(this)">×</button>
+      `;
+      row.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', calculateTotalTime);
+      });
+      timeRowsContainer.appendChild(row);
+      calculateTotalTime();
+    }
+
+    function removeRow(btn) {
+      btn.parentElement.remove();
+      calculateTotalTime();
+    }
+
+    function calculateTotalTime() {
+      let totalMinutes = 0;
+      let totalHours = 0;
+
+      document.querySelectorAll('.time-row').forEach(row => {
+        const h = parseInt(row.querySelector('.hour-input').value) || 0;
+        const m = parseInt(row.querySelector('.min-input').value) || 0;
+        totalHours += h;
+        totalMinutes += m;
+      });
+
+      const extraHours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      totalHours += extraHours;
+
+      timeResult.innerHTML = `Total: <strong>${totalHours} hours ${minutes} minutes</strong>`;
+
+      const firstRemoveBtn = document.querySelector('.time-row .remove-row');
+      if (firstRemoveBtn) {
+        firstRemoveBtn.style.visibility = document.querySelectorAll('.time-row').length > 1 ? 'visible' : 'hidden';
+      }
+    }
+
+    // Initialize
+    document.querySelectorAll('#timeRows input').forEach(input => {
+      input.addEventListener('input', calculateTotalTime);
+    });
+    calculateTotalTime();
+  </script>
+</body>
+</html>
