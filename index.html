@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login — GPIDATA</title>
+  <title>Login — SiteFinder</title>
   <style>
     /* --- আধুনিক স্টাইল শুরু --- */
     body {
@@ -294,7 +294,7 @@
         if (match) {
           if (rememberEl.checked) {
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('gpidata_user', user);
+            localStorage.setItem('SiteFinder_user', user);
           }
           showMessage('✅ সফলভাবে লগইন — রিডাইরেক্ট হচ্ছে...', false);
           setTimeout(() => window.location.href = 'dashboard.html', 700);
@@ -319,3 +319,4 @@
   </script>
 </body>
 </html>
+
