@@ -7,6 +7,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- 🔒 LOGIN PROTECTION (ছোদা: আগেই লোডের শুরুতে চেক) -->
+  <script>
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+      // লগইন না থাকলে login পেজে রিডাইরেক্ট
+      window.location.replace('login.html');
+    }
+  </script>
+
   <style>
     :root {
       --neon-blue: #00f0ff;
@@ -301,19 +310,25 @@
       btn.classList.add('active');
     }
 
-    // Logout with Hack Effect
+    // Logout with Hack Effect (same visual as আগের কোড, কিন্তু session-clear করে login.html এ ফিরবে)
     function confirmLogout() {
       if (confirm("TERMINATE CONNECTION?")) {
+        // clear session flags
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('SiteFinder_user');
+
+        // show the ACCESS DENIED / disconnecting screen (as before)
         document.body.innerHTML = `
           <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#000;color:#0f0;font-family:monospace;display:flex;align-items:center;justify-content:center;flex-direction:column;">
             <h1 style="font-size:4rem;animation:glitch 1s infinite;">ACCESS DENIED</h1>
             <p style="animation:typing 3s steps(30) infinite;">DISCONNECTING...</p>
           </div>`;
-        setTimeout(() => window.location.href = "index.html", 3000);
+        // পরে login.html এ ফেরত পাঠাবে
+        setTimeout(() => window.location.href = "login.html", 3000);
       }
     }
 
-    // Glitch Animation
+    // Glitch Animation styles appended
     const style = document.createElement('style');
     style.innerHTML = `
       @keyframes glitch {
@@ -327,8 +342,7 @@
       @keyframes typing {
         from { width: 0 }
         to { width: 100% }
-      }
-    `;
+      }`;
     document.head.appendChild(style);
   </script>
 
