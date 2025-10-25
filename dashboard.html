@@ -310,7 +310,7 @@
       btn.classList.add('active');
     }
 
-    // Logout with Hack Effect (same visual as আগের কোড, কিন্তু session-clear করে login.html এ ফিরবে)
+    // Logout with Hack Effect (same visual as আগের কোড, কিন্তু session-clear করে index.html এ ফিরবে)
     function confirmLogout() {
       if (confirm("TERMINATE CONNECTION?")) {
         // clear session flags
@@ -323,7 +323,7 @@
             <h1 style="font-size:4rem;animation:glitch 1s infinite;">ACCESS DENIED</h1>
             <p style="animation:typing 3s steps(30) infinite;">DISCONNECTING...</p>
           </div>`;
-        // পরে login.html এ ফেরত পাঠাবে
+        // পরে index.html এ ফেরত পাঠাবে
         setTimeout(() => window.location.href = "index.html", 3000);
       }
     }
