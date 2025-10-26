@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Instruction - SITE FINDER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- 🔒 page PROTECTION -->
+  <script>
+    const loggedIn =
+      localStorage.getItem('isLoggedIn') === 'true' ||
+      sessionStorage.getItem('isLoggedIn') === 'true';
+    if (!loggedIn) {
+      window.location.href = './index.html';
+    }
+  </script>
+
+  <style>
+    :root {
+      --neon-blue: #00f0ff;
+      --neon-pink: #ff00ff;
+      --neon-purple: #9d00ff;
+      --bg: #0a0a0a;
+      --text: #e0e0ff;
+      --card-bg: rgba(20,20,40,0.4);
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Roboto Mono', monospace;
+      min-height: 100vh;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .neon-text {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0,240,255,0.8);
+    }
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0,240,255,0.3);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      max-width: 650px;
+      width: 100%;
+      text-align: left;
+      box-shadow: 0 0 40px rgba(0,240,255,0.3);
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 10px rgba(0,240,255,0.5);
+    }
+    p {
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      color: #fff;
+    }
+    .btn {
+      margin-top: 2rem;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff00ff, #00f0ff);
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 25px rgba(255,0,255,0.6), 0 0 50px rgba(0,240,255,0.4);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 0 50px rgba(255,0,255,0.9), 0 0 100px rgba(0,240,255,0.6);
+    }
+    .material-icons { font-size: 1.5rem; }
+
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .lang-toggle button {
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: 2px solid var(--neon-blue);
+      background: transparent;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .lang-toggle button.active {
+      background: linear-gradient(135deg, #ff00ff, #00f0ff);
+      color: white;
+      box-shadow: 0 0 25px rgba(255,0,255,0.6), 0 0 50px rgba(0,240,255,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glass-card">
+    <h1 class="neon-text text-3xl mb-4">System Instruction</h1>
+
+    <div class="lang-toggle">
+      <button id="btnEn" class="active">English</button>
+      <button id="btnBn">বাংলা</button>
+    </div>
+
+    <div id="contentEn">
+      <h2>1. Site Search</h2>
+      <p>Use the <strong>Site Search</strong> feature to find any domain information. Enter the Site ID in the search box and click Search. You can copy, share, or view the location on Google Maps if available.</p>
+
+      <h2>2. Calculator</h2>
+      <p>The built-in Calculator can perform basic and advanced mathematical operations. Use it to calculate quickly without leaving the app.</p>
+
+      <h2>3. Developer Info</h2>
+      <p>Access the Developer page to see app version, creator info, and GitHub link.</p>
+
+      <h2>4. Theme & Customization</h2>
+      <p>Click the palette icon at the top-right corner to select your preferred theme. Themes change the color glow of the Dashboard cards.</p>
+
+      <h2>5. App Update</h2>
+      <p>If an app update is available, a notification button will appear. Click it to download the latest version from the official link.</p>
+
+      <h2>6. Logout</h2>
+      <p>Click the TERMINATE SESSION button to log out. Confirm the popup to safely exit.</p>
+    </div>
+
+    <div id="contentBn" style="display:none;">
+      <h2>১. সাইট সার্চ</h2>
+      <p><strong>Site Search</strong> ব্যবহার করে যেকোনো ডোমেইনের তথ্য খুঁজুন। সার্চ বক্সে Site ID লিখে Search বোতামে ক্লিক করুন। আপনি কপি, শেয়ার বা Google Maps-এ লোকেশন দেখতে পারবেন।</p>
+
+      <h2>২. ক্যালকুলেটর</h2>
+      <p>বিল্ট-ইন ক্যালকুলেটর সহজ ও উন্নত গণনা করতে সক্ষম। অ্যাপ ছাড়াই দ্রুত হিসাব করুন।</p>
+
+      <h2>৩. ডেভেলপার ইনফো</h2>
+      <p>Developer পেজে অ্যাপ ভার্সন, নির্মাতার তথ্য এবং GitHub লিঙ্ক দেখা যাবে।</p>
+
+      <h2>৪. থিম এবং কাস্টমাইজেশন</h2>
+      <p>ড্যাশবোর্ডের উপরের ডানদিকের প্যালেট আইকনে ক্লিক করে থিম পরিবর্তন করুন। থিম ড্যাশবোর্ড কার্ডের রঙ পরিবর্তন করবে।</p>
+
+      <h2>৫. অ্যাপ আপডেট</h2>
+      <p>নতুন আপডেট উপলব্ধ হলে একটি নোটিফিকেশন বোতাম প্রদর্শিত হবে। ক্লিক করে অফিসিয়াল লিঙ্ক থেকে ডাউনলোড করুন।</p>
+
+      <h2>৬. লগআউট</h2>
+      <p>TERMINATE SESSION বোতামে ক্লিক করুন। নিশ্চিতকরণের পর নিরাপদে অ্যাপ থেকে বের হয়ে যান।</p>
+    </div>
+
+    <button class="btn" onclick="goBack()">
+      <span class="material-icons">arrow_back</span> Back to Dashboard
+    </button>
+  </div>
+
+  <script>
+    const btnEn = document.getElementById('btnEn');
+    const btnBn = document.getElementById('btnBn');
+    const contentEn = document.getElementById('contentEn');
+    const contentBn = document.getElementById('contentBn');
+
+    btnEn.onclick = () => {
+      contentEn.style.display = 'block';
+      contentBn.style.display = 'none';
+      btnEn.classList.add('active');
+      btnBn.classList.remove('active');
+    }
+
+    btnBn.onclick = () => {
+      contentEn.style.display = 'none';
+      contentBn.style.display = 'block';
+      btnBn.classList.add('active');
+      btnEn.classList.remove('active');
+    }
+
+    function goBack() {
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+
+</body>
+</html>
