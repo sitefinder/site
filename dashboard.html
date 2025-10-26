@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <!-- 🔒 index PROTECTION (Fixed: checks both localStorage + sessionStorage) -->
+  <!-- 🔒 index PROTECTION -->
   <script>
     const loggedIn =
       localStorage.getItem('isLoggedIn') === 'true' ||
@@ -54,16 +54,10 @@
       100% { transform: translate(50px, 50px); }
     }
 
-    .flip-card {
-      width: 100%;
-      height: 100%;
-      perspective: 1000px;
-      cursor: pointer;
-    }
+    .flip-card { width: 100%; height: 100%; perspective: 1000px; cursor: pointer; }
     .flip-card-inner {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       transform-style: preserve-3d;
     }
@@ -164,29 +158,27 @@
       box-shadow: 0 0 50px rgba(255,0,255,0.9), 0 0 100px rgba(0,240,255,0.6);
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
-      max-width: 1200px;
-      width: 100%;
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; max-width: 1200px; width: 100%; }
   </style>
 </head>
 <body>
 
   <div class="cyber-grid"></div>
 
-  <!-- Theme Toggle -->
-  <div class="fixed top-6 right-6 z-50">
+  <!-- Theme Toggle + Download Button -->
+  <div class="fixed top-6 right-6 z-50 flex gap-2">
     <button onclick="toggleTheme()" class="text-white text-3xl bg-white/10 backdrop-blur p-2 rounded-full shadow-lg neon-glow">
       <span class="material-icons">color_lens</span>
     </button>
-    <div id="themePanel" class="hidden mt-3 flex gap-2 bg-black/50 backdrop-blur p-3 rounded-2xl border border-cyan-500/50">
-      <div class="theme-btn bg-gradient-to-r from-cyan-400 to-blue-600 active" data-theme="cyber" onclick="setTheme(this)"></div>
-      <div class="theme-btn bg-gradient-to-r from-pink-500 to-purple-600" data-theme="pink" onclick="setTheme(this)"></div>
-      <div class="theme-btn bg-gradient-to-r from-green-400 to-teal-600" data-theme="matrix" onclick="setTheme(this)"></div>
-    </div>
+    <button onclick="downloadApp()" class="text-white text-sm px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full neon-glow shadow-lg uppercase font-bold">
+      Download Our App
+    </button>
+  </div>
+
+  <div id="themePanel" class="hidden fixed top-16 right-6 flex gap-2 bg-black/50 backdrop-blur p-3 rounded-2xl border border-cyan-500/50 z-50">
+    <div class="theme-btn bg-gradient-to-r from-cyan-400 to-blue-600 active" data-theme="cyber" onclick="setTheme(this)"></div>
+    <div class="theme-btn bg-gradient-to-r from-pink-500 to-purple-600" data-theme="pink" onclick="setTheme(this)"></div>
+    <div class="theme-btn bg-gradient-to-r from-green-400 to-teal-600" data-theme="matrix" onclick="setTheme(this)"></div>
   </div>
 
   <div class="w-full max-w-6xl text-center relative z-10">
@@ -196,31 +188,26 @@
     </header>
 
     <div class="grid">
-      <a href="search.html" class="card-container block"><div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front neon-glow"><div class="text-5xl text-cyan-400 mb-3">Site Search</div></div><div class="flip-card-back"><p class="text-pink-300 text-sm">Find any domain</p></div></div></div></a>
-
+      <a href="search.html" class="card-container block"><div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front neon-glow"><div class="text-5xl text-cyan-400 mb-3">Site Search</div></div><div class="flip-card-back"><p class="text-pink-300 text-sm">Find any Site</p></div></div></div></a>
       <a href="calculator.html" class="card-container block"><div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front neon-glow"><div class="text-4xl text-purple-400 mb-3">Calculator</div></div><div class="flip-card-back"><p class="text-pink-100 text-sm">Math Engine v2.0</p></div></div></div></a>
-
       <a href="instruction.html" class="card-container block"><div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front neon-glow"><div class="text-3xl text-green-400 mb-3">Instruction</div></div><div class="flip-card-back"><p class="text-pink-300 text-sm">System Manual</p></div></div></div></a>
-
       <a href="developer.html" class="card-container block"><div class="flip-card h-64"><div class="flip-card-inner"><div class="flip-card-front neon-glow"><div class="text-6xl text-orange-400 mb-3">code</div><h3 class="text-xl font-bold text-orange-300">Developer</h3></div><div class="flip-card-back"><p class="text-pink-300 text-sm">Creator: Hridoy Mahmudul<br>Version: 5.0.0</p></div></div></div></a>
     </div>
 
-    <button onclick="confirmLogout()" class="logout-btn neon-glow">
+    <button onclick="confirmLogout()" class="logout-btn neon-glow mt-12">
       <span class="material-icons text-xl">power_settings_new</span>
       <span>TERMINATE SESSION</span>
     </button>
   </div>
 
   <script>
-    function toggleTheme() {
-      document.getElementById('themePanel').classList.toggle('hidden');
-    }
+    function toggleTheme() { document.getElementById('themePanel').classList.toggle('hidden'); }
     function setTheme(btn) {
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
     function confirmLogout() {
-      if (confirm("TERMINATE CONNECTION?")) {
+      if(confirm("TERMINATE CONNECTION?")) {
         localStorage.removeItem('isLoggedIn');
         sessionStorage.removeItem('isLoggedIn');
         document.body.innerHTML = `
@@ -230,6 +217,10 @@
           </div>`;
         setTimeout(() => window.location.href = './index.html', 3000);
       }
+    }
+
+    function downloadApp() {
+      window.open('https://github.com/Hridoy398398/myapp-update/releases/download/v.5.0.1/Site.Finder.v5.0.1.apk', '_blank');
     }
   </script>
 </body>
