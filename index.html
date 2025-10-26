@@ -7,7 +7,7 @@
   <style>
     /* --- আধুনিক স্টাইল শুরু --- */
     body {
-      background: linear-gradient(135deg, #f3f4f6, #e5e7eb); /* গ্র্যাডিয়েন্ট ব্যাকগ্রাউন্ড */
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       margin: 0;
       padding: 20px;
@@ -216,7 +216,7 @@
     </div>
 
     <div class="checkbox">
-      <label><input type="checkbox" id="remember" /> Remember Me</label>
+      <label><input type="checkbox" id="remember" checked /> Remember Me</label>
     </div>
 
     <button class="btn" id="loginBtn">সাইন ইন</button>
@@ -229,7 +229,6 @@
   <script>
     const LOGIN_JSON_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/login.json";
 
-    // Elements
     const usernameEl = document.getElementById('username');
     const passwordEl = document.getElementById('password');
     const rememberEl = document.getElementById('remember');
@@ -238,29 +237,34 @@
     const togglePass = document.getElementById('togglePassword');
     const forgot = document.getElementById('forgot');
 
-    // Show/hide password
+    // 👁️ Show/hide password
     togglePass.addEventListener('click', () => {
       const type = passwordEl.getAttribute('type') === 'password' ? 'text' : 'password';
       passwordEl.setAttribute('type', type);
       togglePass.textContent = type === 'password' ? '👁️' : '🙈';
     });
 
-    // Auto-redirect if remembered
+    // ✅ Checkbox default checked & remembered state restore
+    if (localStorage.getItem('rememberMe') === 'true') {
+      rememberEl.checked = true;
+    }
+
+    // 🟢 Auto-redirect if already logged in
     if (localStorage.getItem('isLoggedIn') === 'true') {
       window.location.href = 'dashboard.html';
     }
 
-    // Helper: show message
+    // 🔔 Helper message function
     function showMessage(text, isError = true) {
       messageEl.style.display = 'block';
       messageEl.className = `msg ${isError ? 'error' : 'success'}`;
       messageEl.textContent = text;
       setTimeout(() => {
         messageEl.style.display = 'none';
-      }, 5000); // 5 সেকেন্ড পর মেসেজ লুকানো হবে
+      }, 5000);
     }
 
-    // Real-time input validation
+    // 🧠 Real-time validation
     [usernameEl, passwordEl].forEach(input => {
       input.addEventListener('input', () => {
         if (input.value.trim()) {
@@ -269,7 +273,7 @@
       });
     });
 
-    // Main login handler
+    // 🚀 Main login
     loginBtn.addEventListener('click', async () => {
       messageEl.style.display = 'none';
       const user = usernameEl.value.trim();
@@ -287,15 +291,22 @@
       try {
         const res = await fetch(LOGIN_JSON_URL, { cache: 'no-store' });
         if (!res.ok) throw new Error('Network response not OK');
-
         const data = await res.json();
-        const match = Array.isArray(data) ? data.find(u => String(u.username) === user && String(u.password) === pass) : null;
+
+        const match = Array.isArray(data)
+          ? data.find(u => String(u.username) === user && String(u.password) === pass)
+          : null;
 
         if (match) {
+          // Remember logic
           if (rememberEl.checked) {
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('SiteFinder_user', user);
+            localStorage.setItem('rememberMe', 'true');
+          } else {
+            localStorage.removeItem('rememberMe');
           }
+
           showMessage('✅ সফলভাবে লগইন — রিডাইরেক্ট হচ্ছে...', false);
           setTimeout(() => window.location.href = 'dashboard.html', 700);
         } else {
@@ -311,7 +322,7 @@
       }
     });
 
-    // Forgot password behavior
+    // 🔒 Forgot password
     forgot.addEventListener('click', (e) => {
       e.preventDefault();
       showMessage('পাসওয়ার্ড রিসেটের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।');
@@ -319,4 +330,3 @@
   </script>
 </body>
 </html>
-
