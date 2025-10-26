@@ -71,10 +71,23 @@
         </button>
         <h1 class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">SiteFinder</h1>
       </div>
-      <button id="logoutBtn" class="btn-gradient px-5 py-2 rounded-full font-medium flex items-center gap-2">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-        Logout
-      </button>
+
+      <!-- 🔘 Button Group -->
+      <div class="flex items-center gap-3">
+        <button id="downloadBtn" class="btn-blue px-5 py-2 rounded-full font-medium flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Download our App
+        </button>
+
+        <button id="logoutBtn" class="btn-gradient px-5 py-2 rounded-full font-medium flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+          </svg>
+          Logout
+        </button>
+      </div>
     </div>
   </header>
 
@@ -133,6 +146,7 @@
       updateBtn: $('#checkUpdateBtn'),
       logoutBtn: $('#logoutBtn'),
       backBtn: $('#backBtn'),
+      downloadBtn: $('#downloadBtn'),
       actionBtns: $('#actionButtons')
     };
 
@@ -140,6 +154,8 @@
     const JSON_URL = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec";
     const VERSION_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/version.json";
     const VERSION = "5.0.1";
+    const DOWNLOAD_URL = "https://github.com/Hridoy398398/myapp-update/releases/download/v.5.0.1/Site.Finder.v5.0.1.apk";
+
     $('#versionDisplay').textContent = VERSION;
 
     // Back
@@ -150,6 +166,11 @@
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("SiteFinder_user");
       window.location.assign("index.html");
+    };
+
+    // ✅ Download Button
+    els.downloadBtn.onclick = () => {
+      window.open(DOWNLOAD_URL, "_blank");
     };
 
     // Search Function
@@ -177,7 +198,7 @@
         }
         result = out.trim();
         show(result);
-        if (lat && lng) showMapBtn(); // ✅ Fixed: always show map when lat/lng exist
+        if (lat && lng) showMapBtn();
       } catch {
         show("ডেটা লোড করতে সমস্যা হয়েছে", "text-red-300");
       } finally {
