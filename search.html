@@ -55,10 +55,11 @@
 
 <body class="flex flex-col min-h-screen text-white">
 
-  <!-- 🔒 index PROTECTION -->
+  <!-- 🔒 LOGIN PROTECTION -->
   <script>
     if (localStorage.getItem("isLoggedIn") !== "true") {
-      window.location.href = "index.html"; // লগইন ছাড়া ঢুকতে পারবে না
+      // Fix: Using assign() for compliant navigation in sandbox, avoiding SyntaxError
+      window.location.assign("login.html"); // লগইন ছাড়া ঢুকতে পারবে না
     }
   </script>
 
@@ -131,6 +132,7 @@
       mapBtn: $('#openMapBtn'),
       updateBtn: $('#checkUpdateBtn'),
       logoutBtn: $('#logoutBtn'),
+      backBtn: $('#backBtn'), // Added back button element reference
       actionBtns: $('#actionButtons'),
       label: $('#searchBox').nextElementSibling.nextElementSibling
     };
@@ -141,11 +143,18 @@
     const VERSION = "5.0.1";
     $('#versionDisplay').textContent = VERSION;
 
+    // Back Button: Navigate to dashboard
+    els.backBtn.onclick = () => {
+      // Fix: Using assign() for compliant navigation in sandbox
+      window.location.assign("dashboard.html");
+    };
+    
     // Logout
     els.logoutBtn.onclick = () => {
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("SiteFinder_user");
-      window.location.href = "index.html";
+      // Fix: Using assign() for compliant navigation in sandbox, avoiding SyntaxError
+      window.location.assign("login.html");
     };
 
     // Search
