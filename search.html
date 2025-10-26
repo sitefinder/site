@@ -55,10 +55,10 @@
 
 <body class="flex flex-col min-h-screen text-white">
 
-  <!-- 🔒 LOGIN PROTECTION -->
+  <!-- 🔒 index PROTECTION -->
   <script>
     if (localStorage.getItem("isLoggedIn") !== "true") {
-      window.location.href = "login.html"; // লগইন ছাড়া ঢুকতে পারবে না
+      window.location.href = "index.html"; // লগইন ছাড়া ঢুকতে পারবে না
     }
   </script>
 
@@ -145,7 +145,7 @@
     els.logoutBtn.onclick = () => {
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("SiteFinder_user");
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     };
 
     // Search
