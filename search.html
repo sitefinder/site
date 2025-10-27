@@ -173,6 +173,14 @@
       window.open(DOWNLOAD_URL, "_blank");
     };
 
+    // ✅ NEW: Press Enter to Search
+    els.searchBox.addEventListener("keydown", e => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        els.searchBtn.click();
+      }
+    });
+
     // Search Function
     els.searchBtn.onclick = async () => {
       const q = els.searchBox.value.trim();
