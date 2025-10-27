@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SiteFinder</title>
 
-  <!-- Preload Google Fonts -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -14,6 +14,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: { sans: ['Poppins', 'sans-serif'] },
@@ -24,42 +25,34 @@
     };
   </script>
 
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
-    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
-    .glass {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-    }
-    .input-focus:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(167,139,250,0.3);
-    }
+    body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; transition: background 0.3s; }
+    .glass { background: rgba(255,255,255,0.15); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.1); transition: background 0.3s, border 0.3s; }
+    .input-focus:focus { outline: none; box-shadow: 0 0 0 3px rgba(167,139,250,0.3); }
     .scrollbar::-webkit-scrollbar { width: 8px; }
     .scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 10px; }
     .scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.6); }
-
-    .btn-gradient {
-      background: linear-gradient(45deg,#ff6b6b,#feca57);
-      box-shadow: 0 4px 15px rgba(255,107,107,0.3);
-      transition: all 0.3s ease;
-    }
+    .btn-gradient { background: linear-gradient(45deg,#ff6b6b,#feca57); box-shadow: 0 4px 15px rgba(255,107,107,0.3); transition: all 0.3s ease; }
     .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,107,107,0.4); }
     .btn-blue { background: linear-gradient(45deg,#4facfe,#00f2fe); box-shadow: 0 4px 15px rgba(79,172,254,0.3); }
     .btn-blue:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79,172,254,0.4); }
     .btn-green { background: linear-gradient(45deg,#56ab2f,#a8e6cf); box-shadow: 0 4px 15px rgba(86,171,47,0.3); }
     .btn-green:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(86,171,47,0.4); }
+
+    .dark body { background: #1a1a1a; }
+    .dark .glass { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
+
+    #qrcode { margin: 10px auto; }
   </style>
 </head>
 
-<body class="flex flex-col min-h-screen text-white">
+<body class="flex flex-col min-h-screen text-white transition-colors duration-300">
 
-  <!-- 🔒 LOGIN PROTECTION -->
+  <!-- Login Protection -->
   <script>
-    if (localStorage.getItem("isLoggedIn") !== "true") {
-      window.location.assign("index.html");
-    }
+    if (localStorage.getItem("isLoggedIn") !== "true") { window.location.assign("index.html"); }
   </script>
 
   <!-- Header -->
@@ -72,19 +65,13 @@
         <h1 class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-pink-500 bg-clip-text text-transparent">SiteFinder</h1>
       </div>
 
-      <!-- 🔘 Button Group -->
+      <!-- Button Group -->
       <div class="flex items-center gap-3">
+        <button id="toggleDarkBtn" class="btn-green px-4 py-2 rounded-full font-medium">🌙</button>
         <button id="downloadBtn" class="btn-blue px-5 py-2 rounded-full font-medium flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-          </svg>
           Download our App
         </button>
-
         <button id="logoutBtn" class="btn-gradient px-5 py-2 rounded-full font-medium flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-          </svg>
           Logout
         </button>
       </div>
@@ -93,23 +80,18 @@
 
   <!-- Main -->
   <main class="flex-1 p-5 max-w-4xl mx-auto w-full space-y-5">
-    <button id="checkUpdateBtn" class="hidden w-full btn-gradient py-4 rounded-2xl font-semibold text-lg animate-pulse flex items-center justify-center gap-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-      অ্যাপ আপডেট করুন
-    </button>
 
     <div class="relative group">
       <input type="text" id="searchBox" placeholder=" " 
-             class="w-full h-14 pl-12 pr-5 rounded-2xl glass text-white placeholder-white/70 input-focus transition-all duration-300">
-      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      <label for="searchBox" class="absolute left-12 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none transition-all duration-300 
-                    group-focus-within:top-3 group-focus-within:text-xs group-focus-within:text-purple-300">
-        Site ID লিখুন
-      </label>
+             class="w-full h-14 pl-12 pr-12 rounded-2xl glass text-white placeholder-white/70 input-focus transition-all duration-300">
+      <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <label class="absolute left-12 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none transition-all duration-300 
+                    group-focus-within:top-3 group-focus-within:text-xs group-focus-within:text-purple-300">Site ID লিখুন</label>
     </div>
 
     <button id="searchBtn" class="w-full h-14 btn-blue text-white rounded-2xl font-semibold text-lg flex items-center justify-center gap-2">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       Search
     </button>
 
@@ -117,15 +99,19 @@
 
     <div id="resultText" class="glass p-5 rounded-2xl min-h-[120px] text-sm text-white/90 leading-relaxed scrollbar overflow-y-auto max-h-80 opacity-0"></div>
 
-    <div id="actionButtons" class="flex gap-3 opacity-0">
+    <div id="actionButtons" class="flex gap-3 opacity-0 flex-wrap">
       <button id="copyBtn" class="flex-1 btn-gradient py-3 rounded-2xl font-medium flex items-center justify-center gap-2">All Text Copy</button>
       <button id="shareBtn" class="flex-1 btn-blue py-3 rounded-2xl font-medium flex items-center justify-center gap-2">শেয়ার করুন</button>
+      <button id="qrBtn" class="flex-1 btn-green py-3 rounded-2xl font-medium flex items-center justify-center gap-2">Generate QR</button>
     </div>
 
-    <!-- 🔍 Fixed Map Button -->
+    <div id="qrcode" class="text-center"></div>
+
     <button id="openMapBtn" class="hidden w-full btn-green py-4 mt-4 rounded-2xl font-semibold text-lg flex items-center justify-center gap-2">
       লোকেশন দেখুন (Google Maps)
     </button>
+
+    <div id="historyContainer" class="glass p-3 rounded-2xl max-h-40 overflow-y-auto text-sm hidden"></div>
 
     <div class="text-center mt-10 text-xs opacity-70 space-y-1">
       <p>Developed by Hridoy Mahmudul</p>
@@ -143,125 +129,98 @@
       copyBtn: $('#copyBtn'),
       shareBtn: $('#shareBtn'),
       mapBtn: $('#openMapBtn'),
-      updateBtn: $('#checkUpdateBtn'),
+      qrBtn: $('#qrBtn'),
+      history: $('#historyContainer'),
       logoutBtn: $('#logoutBtn'),
       backBtn: $('#backBtn'),
       downloadBtn: $('#downloadBtn'),
+      toggleDarkBtn: $('#toggleDarkBtn'),
       actionBtns: $('#actionButtons')
     };
 
-    let result = "", lat = 0, lng = 0;
     const JSON_URL = "https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec";
-    const VERSION_URL = "https://raw.githubusercontent.com/Hridoy398398/myapp-update/refs/heads/main/version.json";
     const VERSION = "5.0.1";
     const DOWNLOAD_URL = "https://github.com/Hridoy398398/myapp-update/releases/download/v.5.0.1/Site.Finder.v5.0.1.apk";
-
     $('#versionDisplay').textContent = VERSION;
 
-    // Back
-    els.backBtn.onclick = () => window.location.assign("dashboard.html");
+    let result="", lat=0, lng=0;
 
-    // Logout
-    els.logoutBtn.onclick = () => {
-      localStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("SiteFinder_user");
-      window.location.assign("index.html");
+    // ---------- Back & Logout ----------
+    els.backBtn.onclick = ()=> window.location.assign("dashboard.html");
+    els.logoutBtn.onclick = ()=> { localStorage.clear(); window.location.assign("index.html"); };
+    els.downloadBtn.onclick = ()=> window.open(DOWNLOAD_URL, "_blank");
+
+    // ---------- Dark / Light ----------
+    els.toggleDarkBtn.onclick = ()=> {
+      document.documentElement.classList.toggle('dark');
+      els.toggleDarkBtn.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
     };
 
-    // ✅ Download Button
-    els.downloadBtn.onclick = () => {
-      window.open(DOWNLOAD_URL, "_blank");
+    // ---------- Search ----------
+    els.searchBox.addEventListener("keydown", e=>{ if(e.key==='Enter'){ els.searchBtn.click(); } });
+
+    let historyArr = JSON.parse(localStorage.getItem("searchHistory")||"[]");
+    const updateHistoryUI = ()=>{
+      if(historyArr.length===0){ els.history.classList.add('hidden'); return; }
+      els.history.classList.remove('hidden');
+      els.history.innerHTML = historyArr.map(s=>`<div class="p-1 cursor-pointer hover:text-yellow-300">${s}</div>`).join('');
+      els.history.querySelectorAll('div').forEach((el,i)=>el.onclick=()=>{ els.searchBox.value=historyArr[i]; els.searchBtn.click(); });
     };
+    updateHistoryUI();
 
-    // ✅ NEW: Press Enter to Search
-    els.searchBox.addEventListener("keydown", e => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        els.searchBtn.click();
-      }
-    });
-
-    // ✅ Hide label when typing
-    const label = document.querySelector("label[for='searchBox']");
-    els.searchBox.addEventListener("input", () => {
-      if (els.searchBox.value.trim() !== "") {
-        label.classList.add("opacity-0");
-      } else {
-        label.classList.remove("opacity-0");
-      }
-    });
-
-    // Search Function
-    els.searchBtn.onclick = async () => {
+    els.searchBtn.onclick = async ()=>{
       const q = els.searchBox.value.trim();
-      if (!q) return show("Site ID দিন", "text-red-300");
-      showProgress(true); clear();
+      if(!q) return alert("Site ID দিন");
+      showProgress(true); clearResult();
       try {
         const res = await fetch(`${JSON_URL}?site=${encodeURIComponent(q)}`);
         const data = await res.json();
-        if (!data || !Object.keys(data).length) return show("কোনো তথ্য পাওয়া যায়নি।", "text-yellow-300");
-        let out = "";
-        lat = 0; lng = 0;
-        for (const sheet in data) {
-          data[sheet].forEach(row => {
-            for (const k in row) {
-              const v = String(row[k]).trim();
-              if (v) out += `${k} = ${v}\n`;
-            }
-            if (row.Latitude && row.Longitude) {
-              lat = parseFloat(row.Latitude);
-              lng = parseFloat(row.Longitude);
-            }
+        if(!data || !Object.keys(data).length) return showResult("কোনো তথ্য পাওয়া যায়নি।");
+        let out=""; lat=0; lng=0;
+        for(const sheet in data){
+          data[sheet].forEach(row=>{
+            for(const k in row){ if(row[k]) out+=`${k} = ${row[k]}\n`; }
+            if(row.Latitude && row.Longitude){ lat=parseFloat(row.Latitude); lng=parseFloat(row.Longitude); }
           });
         }
-        result = out.trim();
-        show(result);
-        if (lat && lng) showMapBtn();
-      } catch {
-        show("ডেটা লোড করতে সমস্যা হয়েছে", "text-red-300");
-      } finally {
-        showProgress(false);
-      }
+        result=out.trim();
+        showResult(result);
+        if(lat && lng) els.mapBtn.classList.remove('hidden');
+        if(!historyArr.includes(q)){ historyArr.unshift(q); if(historyArr.length>5) historyArr.pop(); localStorage.setItem("searchHistory", JSON.stringify(historyArr)); updateHistoryUI(); }
+      } catch(e){ showResult("ডেটা লোড করতে সমস্যা হয়েছে"); }
+      finally{ showProgress(false); }
     };
 
-    const show = (t, cls="text-white") => {
-      els.resultText.innerHTML = `<pre class="whitespace-pre-wrap font-medium ${cls}">${t}</pre>`;
-      els.resultText.classList.remove('opacity-0');
-      els.actionBtns.classList.remove('opacity-0');
-    };
-    const clear = () => {
-      els.resultText.classList.add('opacity-0');
-      els.actionBtns.classList.add('opacity-0');
-      els.mapBtn.classList.add('hidden');
-    };
+    const showResult = (txt)=>{ els.resultText.innerHTML=`<pre class="whitespace-pre-wrap font-medium">${txt}</pre>`; els.resultText.classList.remove('opacity-0'); els.actionBtns.classList.remove('opacity-0'); };
+    const clearResult = ()=>{ els.resultText.classList.add('opacity-0'); els.actionBtns.classList.add('opacity-0'); els.mapBtn.classList.add('hidden'); $('#qrcode').innerHTML=''; };
     const showProgress = s => els.progress.classList.toggle('hidden', !s);
-    const showMapBtn = () => els.mapBtn.classList.remove('hidden');
 
-    // Copy, Share, Map
-    els.copyBtn.onclick = () => {
-      if (!result) return show("আগে সার্চ করুন", "text-red-300");
-      navigator.clipboard.writeText(result).then(() => show("কপি হয়েছে!", "text-green-300"));
-    };
-    els.shareBtn.onclick = () => {
-      if (!result) return show("আগে সার্চ করুন", "text-red-300");
-      if (navigator.share) navigator.share({ text: result });
-      else show("কপি করে শেয়ার করুন", "text-yellow-300");
-    };
-    els.mapBtn.onclick = () => {
-      if (lat && lng) open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`);
-    };
+    // ---------- Copy, Share ----------
+    els.copyBtn.onclick = ()=>{ if(!result) return alert("আগে সার্চ করুন"); navigator.clipboard.writeText(result).then(()=>alert("কপি হয়েছে!")); };
+    els.shareBtn.onclick = ()=>{ if(!result) return alert("আগে সার্চ করুন"); if(navigator.share){ navigator.share({text: result}); } else alert("কপি করে শেয়ার করুন"); };
 
-    // Version Check
-    (async () => {
-      try {
-        const res = await fetch(VERSION_URL);
-        const { version, apkUrl } = await res.json();
-        if (version !== VERSION) {
-          els.updateBtn.classList.remove('hidden');
-          els.updateBtn.onclick = () => open(apkUrl, "_blank");
-        }
-      } catch {}
-    })();
+    // ---------- Map ----------
+    els.mapBtn.onclick = ()=>{ if(lat && lng) open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`); };
+
+    // ---------- QR Code (Functional, Scan opens WebApp) ----------
+    els.qrBtn.onclick = ()=>{
+      if(!result) return alert("আগে সার্চ করুন");
+      const qrDiv = document.getElementById("qrcode");
+      qrDiv.innerHTML='';
+
+      // সার্চ বক্সের Site ID নিয়ে WebApp URL
+      const siteId = encodeURIComponent(els.searchBox.value.trim());
+      const webAppURL = `https://script.google.com/macros/s/AKfycbyqbg6VIsqTqiyM57hWg_sGgkUkk9YNMiI0aEbFzaiwAs4FI1PtQIoZzbxv6QgTaUB7/exec?site=${siteId}`;
+
+      new QRCode(qrDiv,{
+        text: webAppURL,
+        width:180,
+        height:180,
+        colorDark:"#000000",
+        colorLight:"#ffffff",
+        correctLevel:QRCode.CorrectLevel.H
+      });
+    };
   </script>
 </body>
 </html>
